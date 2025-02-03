@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:trial_project/models/activities.dart';
-import 'package:trial_project/models/category_model.dart';
-import 'package:trial_project/models/travel_model.dart';
+import 'package:beyond_borders/models/activities.dart';
+import 'package:beyond_borders/models/category_model.dart';
+import 'package:beyond_borders/models/travel_model.dart';
+import 'package:beyond_borders/main.dart';
 
 class Destination extends StatefulWidget {
   Destination({super.key});
@@ -32,15 +33,16 @@ class _DestinationState extends State<Destination> {
   Widget build(BuildContext context) {
     _getCategoryInfo();
     return Scaffold(
-      appBar: appBar(),
+      appBar: appBar(context),  // Pass context to the appBar method
+      drawer: HomeWithDrawer(), // Ensure the drawer is accessible here
       body: ListView(
         children: [
           _searchField(),
-          SizedBox(height: 40,),
+          SizedBox(height: 40),
           _categoriesSection(),
-          SizedBox(height: 40,),
+          SizedBox(height: 40),
           _travelSection(),
-          SizedBox(height: 40,),
+          SizedBox(height: 40),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -57,9 +59,9 @@ class _DestinationState extends State<Destination> {
                     ),
                   ),
                 ),
-                SizedBox(height: 15,),
+                SizedBox(height: 15),
                 ListView.separated(
-                  itemBuilder: (context, index){
+                  itemBuilder: (context, index) {
                     return Container(
                       height: 115,
                       decoration: BoxDecoration(
@@ -72,41 +74,40 @@ class _DestinationState extends State<Destination> {
                               blurRadius: 40,
                               offset: const Offset(0, 10),
                             )
-                          ]
-                      ),
+                          ]),
                       child: Padding(
-                        padding: const EdgeInsets.only(top:20, left: 10),
+                        padding: const EdgeInsets.only(top: 20, left: 10),
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start, // Align items at the top
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SvgPicture.asset(
                               activities[index].iconPath,
-                              height: 80, // Adjust size for better fit
+                              height: 80,
                               width: 80,
                             ),
-                            SizedBox(width: 15), // Add space between the icon and text
-                            Expanded( // Allow text to wrap within available space
+                            SizedBox(width: 15),
+                            Expanded(
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     activities[index].name,
                                     style: TextStyle(
                                       color: Color(0xff1D1617),
-                                      fontSize: 18, // Adjust font size for better layout
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  SizedBox(height: 10), // Add space between name and description
+                                  SizedBox(height: 10),
                                   Text(
                                     activities[index].description,
                                     style: TextStyle(
-                                      color: Color(0xff828796), // Use a softer color for description
-                                      fontSize: 12, // Adjust font size for readability
+                                      color: Color(0xff828796),
+                                      fontSize: 12,
                                       fontWeight: FontWeight.w400,
                                     ),
-                                    maxLines: 3, // Limit to 3 lines
-                                    overflow: TextOverflow.ellipsis, // Add ellipsis for overflow
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
@@ -116,14 +117,14 @@ class _DestinationState extends State<Destination> {
                       ),
                     );
                   },
-                  separatorBuilder: (context, index) => SizedBox(height: 20,),
+                  separatorBuilder: (context, index) => SizedBox(height: 20),
                   shrinkWrap: true,
                   itemCount: activities.length,
                 ),
               ],
             ),
           ),
-          SizedBox(height: 40,),
+          SizedBox(height: 40),
         ],
       ),
     );
@@ -146,7 +147,7 @@ class _DestinationState extends State<Destination> {
         ),
         SizedBox(height: 15),
         Container(
-          height: 240, // Explicit height for the container
+          height: 240,
           child: ListView.separated(
             itemBuilder: (context, index) {
               return Container(
@@ -161,10 +162,10 @@ class _DestinationState extends State<Destination> {
                   children: [
                     SvgPicture.asset(
                       travelCategories[index].iconPath,
-                      height: 80, // Set height to prevent overflow
-                      width: 80, // Set width to prevent overflow
+                      height: 80,
+                      width: 80,
                     ),
-                    SizedBox(height: 10), // Space between elements
+                    SizedBox(height: 10),
                     Text(
                       travelCategories[index].name,
                       style: TextStyle(
@@ -187,10 +188,14 @@ class _DestinationState extends State<Destination> {
                       width: 130,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                            colors: [
-                              travelCategories[index].viewIsSelected ? Color(0xff64B6FF) : Colors.transparent,
-                              travelCategories[index].viewIsSelected ? Color(0xff64B6FF) : Colors.transparent,
-                            ]
+                          colors: [
+                            travelCategories[index].viewIsSelected
+                                ? Color(0xff64B6FF)
+                                : Colors.transparent,
+                            travelCategories[index].viewIsSelected
+                                ? Color(0xff64B6FF)
+                                : Colors.transparent,
+                          ],
                         ),
                         borderRadius: BorderRadius.circular(50),
                       ),
@@ -198,9 +203,11 @@ class _DestinationState extends State<Destination> {
                         child: Text(
                           'View',
                           style: TextStyle(
-                              color: travelCategories[index].viewIsSelected ? Colors.white : Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600
+                            color: travelCategories[index].viewIsSelected
+                                ? Colors.white
+                                : Colors.black,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -234,18 +241,15 @@ class _DestinationState extends State<Destination> {
             ),
           ),
         ),
-        SizedBox(height: 15,),
+        SizedBox(height: 15),
         Container(
           height: 120,
           child: ListView.separated(
               itemCount: categories.length,
               scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.only(
-                  left: 20,
-                  right: 20
-              ),
-              separatorBuilder: (context, index) => SizedBox(width: 25,),
-              itemBuilder: (context, index){
+              padding: EdgeInsets.only(left: 20, right: 20),
+              separatorBuilder: (context, index) => SizedBox(width: 25),
+              itemBuilder: (context, index) {
                 return Container(
                   width: 100,
                   decoration: BoxDecoration(
@@ -274,8 +278,7 @@ class _DestinationState extends State<Destination> {
                     ],
                   ),
                 );
-              }
-          ),
+              }),
         ),
       ],
     );
@@ -284,7 +287,7 @@ class _DestinationState extends State<Destination> {
   Container _searchField() {
     return Container(
       height: 50,
-      margin: EdgeInsets.only(top:40, left: 20, right: 20),
+      margin: EdgeInsets.only(top: 40, left: 20, right: 20),
       decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -293,8 +296,7 @@ class _DestinationState extends State<Destination> {
               blurRadius: 40,
               offset: const Offset(0, 3),
             )
-          ]
-      ),
+          ]),
       child: TextField(
           decoration: InputDecoration(
               filled: true,
@@ -330,13 +332,11 @@ class _DestinationState extends State<Destination> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide.none,
-              )
-          )
-      ),
+              ))),
     );
   }
 
-  AppBar appBar() {
+  AppBar appBar(BuildContext context) {
     return AppBar(
       title: const Text(
         '',
@@ -350,7 +350,11 @@ class _DestinationState extends State<Destination> {
       elevation: 0.0,
       centerTitle: true,
       leading: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Navigator.pop(context);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => MyApp()));
+        },
         child: Container(
           margin: const EdgeInsets.all(10),
           alignment: Alignment.center,

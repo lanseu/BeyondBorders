@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:trial_project/pages/about.dart';
-import 'package:trial_project/pages/destinations.dart';
-import 'package:trial_project/pages/home.dart';
-import 'package:trial_project/pages/main_page.dart';
-import 'package:trial_project/pages/registration.dart';
+import 'package:beyond_borders/pages/about.dart';
+import 'package:beyond_borders/pages/destinations.dart';
+import 'package:beyond_borders/pages/home.dart';
+import 'package:beyond_borders/pages/main_page.dart';
+import 'package:beyond_borders/pages/registration.dart';
 
 void main() {
   runApp(const MyApp());
