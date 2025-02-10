@@ -4,6 +4,8 @@ import 'package:beyond_borders/models/activities.dart';
 import 'package:beyond_borders/models/category_model.dart';
 import 'package:beyond_borders/models/travel_model.dart';
 import 'package:beyond_borders/main.dart';
+import 'package:beyond_borders/pages/custom_drawer.dart';
+import 'package:beyond_borders/pages/custom_appbar.dart';
 
 class Destination extends StatefulWidget {
   Destination({super.key});
@@ -33,8 +35,8 @@ class _DestinationState extends State<Destination> {
   Widget build(BuildContext context) {
     _getCategoryInfo();
     return Scaffold(
-      appBar: appBar(context),  // Pass context to the appBar method
-      drawer: HomeWithDrawer(), // Ensure the drawer is accessible here
+      appBar: buildAppBar(),
+      drawer: CustomDrawer(),
       body: ListView(
         children: [
           _searchField(),
@@ -336,58 +338,58 @@ class _DestinationState extends State<Destination> {
     );
   }
 
-  AppBar appBar(BuildContext context) {
-    return AppBar(
-      title: const Text(
-        '',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      backgroundColor: Colors.white,
-      elevation: 0.0,
-      centerTitle: true,
-      leading: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => MyApp()));
-        },
-        child: Container(
-          margin: const EdgeInsets.all(10),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: const Color(0xffF7F8F8),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: SvgPicture.asset(
-            'assets/icons/arrow_left.svg',
-            height: 20,
-            width: 20,
-          ),
-        ),
-      ),
-      actions: [
-        GestureDetector(
-          onTap: () {},
-          child: Container(
-            margin: const EdgeInsets.all(10),
-            alignment: Alignment.center,
-            width: 37,
-            decoration: BoxDecoration(
-              color: const Color(0xffF7F8F8),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: SvgPicture.asset(
-              'assets/icons/dots.svg',
-              height: 20,
-              width: 20,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+//   AppBar appBar(BuildContext context) {
+//     return AppBar(
+//       title: const Text(
+//         '',
+//         style: TextStyle(
+//           color: Colors.black,
+//           fontSize: 24,
+//           fontWeight: FontWeight.bold,
+//         ),
+//       ),
+//       backgroundColor: Colors.white,
+//       elevation: 0.0,
+//       centerTitle: true,
+//       leading: GestureDetector(
+//         onTap: () {
+//           Navigator.pop(context);
+//           Navigator.push(
+//               context, MaterialPageRoute(builder: (context) => MyApp()));
+//         },
+//         child: Container(
+//           margin: const EdgeInsets.all(10),
+//           alignment: Alignment.center,
+//           decoration: BoxDecoration(
+//             color: const Color(0xffF7F8F8),
+//             borderRadius: BorderRadius.circular(10),
+//           ),
+//           child: SvgPicture.asset(
+//             'assets/icons/arrow_left.svg',
+//             height: 20,
+//             width: 20,
+//           ),
+//         ),
+//       ),
+//       actions: [
+//         GestureDetector(
+//           onTap: () {},
+//           child: Container(
+//             margin: const EdgeInsets.all(10),
+//             alignment: Alignment.center,
+//             width: 37,
+//             decoration: BoxDecoration(
+//               color: const Color(0xffF7F8F8),
+//               borderRadius: BorderRadius.circular(10),
+//             ),
+//             child: SvgPicture.asset(
+//               'assets/icons/dots.svg',
+//               height: 20,
+//               width: 20,
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+ }
