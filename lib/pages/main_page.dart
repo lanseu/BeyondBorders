@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:beyond_borders/pages/custom_drawer.dart';
+import 'package:beyond_borders/pages/custom_appbar.dart';
 
 class main_page extends StatelessWidget {
   const main_page({super.key});
@@ -6,11 +8,8 @@ class main_page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Main Page'),
-        centerTitle: true,
-        backgroundColor: Colors.blueAccent,
-      ),
+      appBar: buildAppBar(),
+      drawer: CustomDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

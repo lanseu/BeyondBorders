@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:beyond_borders/pages/custom_drawer.dart';
+import 'package:beyond_borders/pages/custom_appbar.dart';
 
 class registration extends StatelessWidget {
   const registration({super.key});
@@ -7,7 +9,8 @@ class registration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: buildAppBar(),
+      drawer: CustomDrawer(),
       body: const RegistrationForm(),
     );
   }
