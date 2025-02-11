@@ -6,6 +6,8 @@ import 'package:beyond_borders/pages/main_page.dart';
 import 'package:beyond_borders/pages/registration.dart';
 
 class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -73,6 +75,8 @@ class CustomDrawer extends StatelessWidget {
 
 
 class DrwHeader extends StatelessWidget {
+  const DrwHeader({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -119,7 +123,7 @@ class HoverListTile extends StatefulWidget {
   final String iconPath;
   final VoidCallback onTap;
 
-  HoverListTile({required this.title, required this.iconPath, required this.onTap});
+  const HoverListTile({super.key, required this.title, required this.iconPath, required this.onTap});
 
   @override
   _HoverListTileState createState() => _HoverListTileState();
@@ -164,6 +168,8 @@ class _HoverListTileState extends State<HoverListTile> {
 
 
 class DrwListView extends StatelessWidget {
+  const DrwListView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -8,7 +8,7 @@ import 'package:beyond_borders/pages/custom_drawer.dart';
 import 'package:beyond_borders/pages/custom_appbar.dart';
 
 class Destination extends StatefulWidget {
-  Destination({super.key});
+  const Destination({super.key});
 
   @override
   State<Destination> createState() => _DestinationState();
@@ -148,7 +148,7 @@ class _DestinationState extends State<Destination> {
           ),
         ),
         SizedBox(height: 15),
-        Container(
+        SizedBox(
           height: 240,
           child: ListView.separated(
             itemBuilder: (context, index) {
@@ -244,7 +244,7 @@ class _DestinationState extends State<Destination> {
           ),
         ),
         SizedBox(height: 15),
-        Container(
+        SizedBox(
           height: 120,
           child: ListView.separated(
               itemCount: categories.length,
@@ -313,13 +313,13 @@ class _DestinationState extends State<Destination> {
                 padding: const EdgeInsets.all(12),
                 child: SvgPicture.asset("assets/icons/search.svg"),
               ),
-              suffixIcon: Container(
+              suffixIcon: SizedBox(
                 width: 100,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     VerticalDivider(
-                      color: Color(0xffDDDDADA),
+                      color: Color(0xffddddada),
                       thickness: 1,
                       indent: 10,
                       endIndent: 10,
