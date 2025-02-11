@@ -1,4 +1,4 @@
-package com.example.trial_project
+package com.example.beyond_borders
 
 import io.flutter.embedding.android.FlutterActivity
 
