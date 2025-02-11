@@ -9,26 +9,15 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c9ba616-a328-4d81-803f-288dd86b902e" name="Changes" comment="Name and other updates">
-      <change afterPath="$PROJECT_DIR$/assets/icons/about_airplane.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/about_contact.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/about_feature.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/about_icon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/airplane_departure.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/beyond_borders_header.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/destination_icon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/home_icon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/registration_icon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fonts/Batangas-Bold-700.otf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/pages/custom_appbar.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/pages/custom_drawer.dart" afterDir="false" />
+    <list default="true" id="0c9ba616-a328-4d81-803f-288dd86b902e" name="Changes" comment="Updated drawer icons, Added hover effects, Added appbar and drawer components, Updated the About page, and Added Assets (Font and other SVG files).">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/models/activities.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/models/activities.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/models/category_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/models/category_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/models/travel_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/models/travel_model.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/pages/about.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/about.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/custom_drawer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/custom_drawer.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/pages/destinations.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/destinations.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/main_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/main_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/registration.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/registration.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,23 +59,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Flutter.main.dart.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "Berns",
-    "io.flutter.reload.alreadyRun": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/flutter/src/flutter/bin/cache/dart-sdk",
-    "settings.editor.selected.configurable": "dart.settings",
-    "show.migrate.to.gradle.popup": "false"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Flutter.main.dart.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Berns&quot;,
+    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/flutter/src/flutter/bin/cache/dart-sdk&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;dart.settings&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\beyond_borders\assets\icons" />
@@ -135,7 +124,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738556993717</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Updated drawer icons, Added hover effects, Added appbar and drawer components, Updated the About page, and Added Assets (Font and other SVG files).">
+      <option name="closed" value="true" />
+      <created>1739199480756</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1739199480757</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -153,6 +150,7 @@
     <MESSAGE value="Initial Commit" />
     <MESSAGE value="Addition of Drawer and other pages" />
     <MESSAGE value="Name and other updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="Name and other updates" />
+    <MESSAGE value="Updated drawer icons, Added hover effects, Added appbar and drawer components, Updated the About page, and Added Assets (Font and other SVG files)." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated drawer icons, Added hover effects, Added appbar and drawer components, Updated the About page, and Added Assets (Font and other SVG files)." />
   </component>
 </project>
