@@ -6,6 +6,7 @@ import 'package:beyond_borders/models/travel_model.dart';
 import 'package:beyond_borders/main.dart';
 import 'package:beyond_borders/pages/custom_drawer.dart';
 import 'package:beyond_borders/pages/custom_appbar.dart';
+import 'package:beyond_borders/pages/london_destinations.dart';
 
 class Destination extends StatefulWidget {
   const Destination({super.key});
@@ -188,32 +189,44 @@ class _DestinationState extends State<Destination> {
                       margin: EdgeInsets.only(top: 10),
                       height: 40,
                       width: 130,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            travelCategories[index].viewIsSelected
-                                ? Color(0xff64B6FF)
-                                : Colors.transparent,
-                            travelCategories[index].viewIsSelected
-                                ? Color(0xff64B6FF)
-                                : Colors.transparent,
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'View',
-                          style: TextStyle(
-                            color: travelCategories[index].viewIsSelected
-                                ? Colors.white
-                                : Colors.black,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LondonDestinations(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                travelCategories[index].viewIsSelected
+                                    ? Color(0xff64B6FF)
+                                    : Colors.transparent,
+                                travelCategories[index].viewIsSelected
+                                    ? Color(0xff64B6FF)
+                                    : Colors.transparent,
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'View',
+                              style: TextStyle(
+                                color: travelCategories[index].viewIsSelected
+                                    ? Colors.white
+                                    : Colors.black,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               );
