@@ -2,7 +2,7 @@ name: beyond_borders
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -52,61 +52,61 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  uses-material-design: true
 
-   uses-material-design: true
+  assets:
+    - assets/icons/arrow_left.svg
+    - assets/icons/dots.svg
+    - assets/icons/search.svg
+    - assets/icons/settings.svg
+    - assets/icons/island.svg
+    - assets/icons/mountain.svg
+    - assets/icons/plane.svg
+    - assets/icons/surf.svg
+    - assets/icons/train.svg
+    - assets/icons/eiffel_tower.svg
+    - assets/icons/japan_shrine.svg
+    - assets/icons/london_bridge.svg
+    - assets/icons/pyramid.svg
+    - assets/icons/statue_of_liberty.svg
+    - assets/icons/bbq.svg
+    - assets/icons/diving.svg
+    - assets/icons/hot_air_balloon.svg
+    - assets/icons/hotel.svg
+    - assets/icons/photog.svg
+    - assets/icons/flying.svg
+    - assets/icons/museum.svg
+    - assets/icons/travelling.svg
+    - assets/icons/airplane_departure.svg
+    - assets/icons/about_icon.svg
+    - assets/icons/destination_icon.svg
+    - assets/icons/registration_icon.svg
+    - assets/icons/home_icon.svg
+    - assets/icons/beyond_borders_header.svg
+    - assets/icons/about_airplane.svg
+    - assets/icons/about_contact.svg
+    - assets/icons/about_feature.svg
+    - assets/images/avatar.jpg
+    - assets/images/beyond_borders.png
+    - assets/images/london_bridge_header.jpg
 
-   assets:
-      - assets/icons/arrow_left.svg
-      - assets/icons/dots.svg
-      - assets/icons/search.svg
-      - assets/icons/settings.svg
-      - assets/icons/island.svg
-      - assets/icons/mountain.svg
-      - assets/icons/plane.svg
-      - assets/icons/surf.svg
-      - assets/icons/train.svg
-      - assets/icons/eiffel_tower.svg
-      - assets/icons/japan_shrine.svg
-      - assets/icons/london_bridge.svg
-      - assets/icons/pyramid.svg
-      - assets/icons/statue_of_liberty.svg
-      - assets/icons/bbq.svg
-      - assets/icons/diving.svg
-      - assets/icons/hot_air_balloon.svg
-      - assets/icons/hotel.svg
-      - assets/icons/photog.svg
-      - assets/icons/flying.svg
-      - assets/icons/museum.svg
-      - assets/icons/travelling.svg
-      - assets/icons/airplane_departure.svg
-      - assets/icons/about_icon.svg
-      - assets/icons/destination_icon.svg
-      - assets/icons/registration_icon.svg
-      - assets/icons/home_icon.svg
-      - assets/icons/beyond_borders_header.svg
-      - assets/icons/about_airplane.svg
-      - assets/icons/about_contact.svg
-      - assets/icons/about_feature.svg
-      - assets/images/avatar.jpg
-      - assets/images/beyond_borders.png
-
-   fonts:
-     - family: Poppins
-       fonts:
-         - asset: fonts/Poppins-Bold.ttf
-           weight: 700
-         - asset: fonts/Poppins-SemiBold.ttf
-           weight: 600
-         - asset: fonts/Poppins-Medium.ttf
-           weight: 500
-         - asset: fonts/Poppins-Regular.ttf
-           weight: 400
-         - asset: fonts/Poppins-Italic.ttf
-           style: italic
-     - family: Batangas
-       fonts:
-         - asset: fonts/Batangas-Bold-700.otf
-           weight: 700
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: fonts/Poppins-Bold.ttf
+          weight: 700
+        - asset: fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: fonts/Poppins-Italic.ttf
+          style: italic
+    - family: Batangas
+      fonts:
+        - asset: fonts/Batangas-Bold-700.otf
+          weight: 700
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
