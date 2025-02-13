@@ -9,9 +9,12 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c9ba616-a328-4d81-803f-288dd86b902e" name="Changes" comment="Dart fixes">
+    <list default="true" id="0c9ba616-a328-4d81-803f-288dd86b902e" name="Changes" comment="Android Fix">
+      <change afterPath="$PROJECT_DIR$/assets/animations/beyond_borders_main.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/kotlin/com/example/trial_project/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/kotlin/com/example/trial_project/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/home.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,6 +76,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\beyond_borders\assets\animations" />
       <recent name="C:\beyond_borders\assets\icons" />
       <recent name="C:\beyond_borders\fonts" />
       <recent name="C:\beyond_borders\assets\images" />
@@ -135,7 +139,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739280446284</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Android Fix">
+      <option name="closed" value="true" />
+      <created>1739283060425</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1739283060425</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -155,6 +167,7 @@
     <MESSAGE value="Name and other updates" />
     <MESSAGE value="Updated drawer icons, Added hover effects, Added appbar and drawer components, Updated the About page, and Added Assets (Font and other SVG files)." />
     <MESSAGE value="Dart fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Dart fixes" />
+    <MESSAGE value="Android Fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Android Fix" />
   </component>
 </project>
