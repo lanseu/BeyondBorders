@@ -1,9 +1,7 @@
-import 'package:beyond_borders/pages/destinations.dart';
-import 'package:beyond_borders/pages/main_page.dart';
 import 'package:flutter/material.dart';
-import 'package:beyond_borders/pages/home.dart';
 import 'package:beyond_borders/pages/custom_drawer.dart';
-import 'package:beyond_borders/pages/custom_appbar.dart';
+import 'package:beyond_borders/pages/main_page.dart';
+import 'package:lottie/lottie.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,11 +15,55 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Poppins'),
-      home: HomeWithDrawer(),
+      home: LoadingScreen(), // Start with loading screen
     );
   }
 }
 
+class LoadingScreen extends StatefulWidget {
+  @override
+  _LoadingScreenState createState() => _LoadingScreenState();
+}
+
+class _LoadingScreenState extends State<LoadingScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 5), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeWithDrawer()),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white, // Background color
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // ✅ Lottie Animation for Loading
+            Lottie.asset(
+                "assets/animations/loading.json",
+                width: 200, height: 200,
+                fit: BoxFit.contain
+            ),
+            SizedBox(height: 20),
+            Text(
+              "Loading...",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ✅ Home Page with Drawer
 class HomeWithDrawer extends StatelessWidget {
   const HomeWithDrawer({super.key});
 
@@ -29,10 +71,11 @@ class HomeWithDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: OnboardingScreen(),
-      drawer: CustomDrawer(), // Use CustomDrawer directly
+      drawer: CustomDrawer(),
     );
   }
 }
+
 
 // class CustomDrawer extends StatelessWidget {
 //   @override
