@@ -91,6 +91,7 @@ flutter:
       - assets/images/avatar.jpg
       - assets/images/beyond_borders.png
       - assets/animations/beyond_borders_main.json
+      - assets/animations/success.json
 
    fonts:
      - family: Poppins
