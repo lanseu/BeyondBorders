@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:beyond_borders/pages/custom_appbar.dart';
 import 'package:beyond_borders/pages/custom_drawer.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LondonDestinations extends StatefulWidget {
   const LondonDestinations({super.key});
@@ -45,8 +46,8 @@ class _LondonDestinationsState extends State<LondonDestinations> {
               fit: BoxFit.cover,
             ),
             Positioned(
-                top: 10,
-                right: 10,
+                top: 20,
+                right: 20,
                 child: Container(
                   width: 40,
                   height: 40,
@@ -120,7 +121,7 @@ class _LondonDestinationsState extends State<LondonDestinations> {
               Icon(
                 Icons.place_outlined,
                 color: Colors.grey[700],
-                size: 20,
+                size: 25,
               ),
               Text(
                 'United Kingdom',
@@ -139,30 +140,43 @@ class _LondonDestinationsState extends State<LondonDestinations> {
 
   Widget _buildInfoCards() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 13),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _infoCard('Best Time', 'March - May', Icons.access_time),
-          _infoCard('Ideal For', 'Family, Friends', Icons.groups_2),
+          _infoCard('Best Time', 'March - May',
+              'assets/icons/destinations_detail_clock.svg'),
+          _infoCard('Ideal For', 'Family, Friends',
+              'assets/icons/destinations_detail_family.svg'),
         ],
       ),
     );
   }
 
-  Widget _infoCard(String title, String value, IconData icon) {
+  Widget _infoCard(String title, String value, String svgPath) {
     return Expanded(
       child: Container(
-        padding: EdgeInsets.all(12),
+        padding: EdgeInsets.all(15),
         margin: EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(12),
-        ),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withAlpha(128),
+                spreadRadius: 1,
+                blurRadius: 2,
+                offset: Offset(0, 2),
+              ),
+            ]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: Colors.blue, size: 30),
+            SvgPicture.asset(
+              svgPath,
+              width: 30,
+              height: 30,
+            ),
             SizedBox(height: 8),
             Text(
               title,
@@ -190,12 +204,7 @@ class _LondonDestinationsState extends State<LondonDestinations> {
       'London Eye',
       'Tower Bridge',
       'Buckingham Palace',
-      'British Museum',
-      'Tate Modern',
-      'St. Paul\'s Cathedral',
-      'The Shard',
-      'Westminster Abbey',
-      'The British Library',
+      'British Museum'
     ];
     return Padding(
         padding: EdgeInsets.all(20),
@@ -206,20 +215,28 @@ class _LondonDestinationsState extends State<LondonDestinations> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             SizedBox(height: 10),
             ...attractions.map((attraction) => Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 8.0), // Vertical margin between items
+                padding: const EdgeInsets.only(bottom: 11),
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withAlpha(128),
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey[200],
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            8.0), // Adjust the radius as needed
-                      ),
-                    ),
-                    onPressed: () {
-                      // Define your onPressed action here
-                    },
+                        backgroundColor: Colors.white,
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        elevation: 0.0),
+                    onPressed: () {},
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
@@ -238,7 +255,7 @@ class _LondonDestinationsState extends State<LondonDestinations> {
                       ),
                     ),
                   ),
-                ))
+                )))
           ],
         ));
   }
