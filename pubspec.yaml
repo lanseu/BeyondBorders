@@ -96,6 +96,7 @@ flutter:
       - assets/images/london_bridge_header.jpg
       - assets/animations/beyond_borders_main.json
       - assets/animations/success.json
+      - assets/animations/loading.json
 
    fonts:
      - family: Poppins
