@@ -156,7 +156,7 @@ class OnboardingPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(image, height: 300, fit: BoxFit.cover),
+          Image.asset(image, height: 500, fit: BoxFit.fill),
           SizedBox(height: 30),
           RichText(
             textAlign: TextAlign.center,
