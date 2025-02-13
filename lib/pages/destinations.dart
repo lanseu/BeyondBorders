@@ -3,10 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:beyond_borders/models/activities.dart';
 import 'package:beyond_borders/models/category_model.dart';
 import 'package:beyond_borders/models/travel_model.dart';
-import 'package:beyond_borders/main.dart';
 import 'package:beyond_borders/pages/custom_drawer.dart';
 import 'package:beyond_borders/pages/custom_appbar.dart';
 import 'package:beyond_borders/pages/london_destinations.dart';
+import 'package:beyond_borders/pages/japan_destinations.dart';
 
 class Destination extends StatefulWidget {
   const Destination({super.key});
@@ -52,7 +52,8 @@ class _DestinationState extends State<Destination> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 4.0, left: 20, right: 20),
+                  padding:
+                      const EdgeInsets.only(bottom: 4.0, left: 20, right: 20),
                   child: Text(
                     'Activities',
                     style: TextStyle(
@@ -191,12 +192,22 @@ class _DestinationState extends State<Destination> {
                       width: 130,
                       child: InkWell(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LondonDestinations(),
-                            ),
-                          );
+                          if (travelCategories[index].name == 'London Bridge') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LondonDestinations(),
+                              ),
+                            );
+                          } else if (travelCategories[index].name ==
+                              'Japanese Shrine') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => JapanDestinations(),
+                              ),
+                            );
+                          }
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -303,15 +314,14 @@ class _DestinationState extends State<Destination> {
     return Container(
       height: 50,
       margin: EdgeInsets.only(top: 40, left: 20, right: 20),
-      decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Color(0xff1D1617).withOpacity(0.3),
-              spreadRadius: 0.0,
-              blurRadius: 40,
-              offset: const Offset(0, 3),
-            )
-          ]),
+      decoration: BoxDecoration(boxShadow: [
+        BoxShadow(
+          color: Color(0xff1D1617).withOpacity(0.3),
+          spreadRadius: 0.0,
+          blurRadius: 40,
+          offset: const Offset(0, 3),
+        )
+      ]),
       child: TextField(
           decoration: InputDecoration(
               filled: true,
@@ -405,4 +415,4 @@ class _DestinationState extends State<Destination> {
 //       ],
 //     );
 //   }
- }
+}
