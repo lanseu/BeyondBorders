@@ -1,3 +1,5 @@
+import 'package:beyond_borders/pages/destinations.dart';
+import 'package:beyond_borders/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:beyond_borders/pages/home.dart';
 import 'package:beyond_borders/pages/custom_drawer.dart';
@@ -26,8 +28,7 @@ class HomeWithDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
-      body: Home(),
+      body: OnboardingScreen(),
       drawer: CustomDrawer(), // Use CustomDrawer directly
     );
   }

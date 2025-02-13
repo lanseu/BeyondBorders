@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:beyond_borders/pages/custom_drawer.dart';
 import 'package:beyond_borders/pages/custom_appbar.dart';
 import 'main_page.dart';
+import 'package:beyond_borders/main.dart';
+import 'home.dart';
 
 class registration extends StatelessWidget {
   const registration({super.key});
@@ -144,7 +146,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => main_page()),
+        MaterialPageRoute(builder: (context) => MyApp()),
       );
     }
   }
@@ -326,7 +328,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey[700])),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => main_page()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
                         },
                         child: const Text('Sign in',
                             style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.blue)),

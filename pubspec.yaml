@@ -89,6 +89,9 @@ flutter:
       - assets/icons/about_contact.svg
       - assets/icons/about_feature.svg
       - assets/images/avatar.jpg
+      - assets/images/onboarding1.jpg
+      - assets/images/onboarding2.jpg
+      - assets/images/onboarding3.jpg
       - assets/images/beyond_borders.png
       - assets/animations/beyond_borders_main.json
       - assets/animations/success.json

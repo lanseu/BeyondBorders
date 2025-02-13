@@ -40,7 +40,7 @@ class CustomDrawer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: InkWell(
-              onTap: () => Navigator.pop(context),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => OnboardingScreen())),
               borderRadius: BorderRadius.circular(30), // Ripple effect respects radius
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
@@ -179,7 +179,7 @@ class DrwListView extends StatelessWidget {
         HoverListTile(
           title: "Home",
           iconPath: 'assets/icons/home_icon.svg',
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => main_page())),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Destination())),
         ),
         SizedBox(height: 10),
         HoverListTile(
@@ -187,12 +187,12 @@ class DrwListView extends StatelessWidget {
           iconPath: 'assets/icons/registration_icon.svg',
           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => registration())),
         ),
-        SizedBox(height: 10),
-        HoverListTile(
-          title: "Destinations",
-          iconPath: 'assets/icons/destination_icon.svg',
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Destination())),
-        ),
+        // SizedBox(height: 10),
+        // HoverListTile(
+        //   title: "Destinations",
+        //   iconPath: 'assets/icons/destination_icon.svg',
+        //   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Destination())),
+        // ),
         SizedBox(height: 10),
         HoverListTile(
           title: "About",
