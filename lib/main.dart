@@ -45,7 +45,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // ✅ Lottie Animation for Loading
             Lottie.asset(
                 "assets/animations/loading.json",
                 width: 200, height: 200,
