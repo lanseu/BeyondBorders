@@ -97,21 +97,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                 // Get Started Button (only on last page)
                 if (_currentPage == onboardingData.length - 1)
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      minimumSize: Size(250, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomePage()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        minimumSize: Size(250, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
+                      child: Text("Get Started", style: TextStyle(color: Colors.white, fontSize: 18)),
                     ),
-                    child: Text("Get Started", style: TextStyle(color: Colors.white, fontSize: 18)),
                   ),
               ],
             ),
