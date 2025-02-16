@@ -16,7 +16,7 @@ class _JapanDestinationsState extends State<JapanDestinations> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(context, showBackButton: true),
       drawer: CustomDrawer(),
       body: SingleChildScrollView(
         child: Column(

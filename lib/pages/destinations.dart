@@ -8,6 +8,8 @@ import 'package:beyond_borders/pages/custom_appbar.dart';
 import 'package:beyond_borders/pages/london_destinations.dart';
 import 'package:beyond_borders/pages/japan_destinations.dart';
 
+enum FilterType { all, categories, popularDestinations, activities }
+
 class Destination extends StatefulWidget {
   const Destination({super.key});
 
@@ -20,6 +22,8 @@ class _DestinationState extends State<Destination> {
   List<TravelCategory> travelCategories = [];
   List<ActivityModel> activities = [];
   String searchQuery = '';  // Add a variable to store the search query
+  bool isAscending = true;  // Add a variable to store the sorting order
+  FilterType selectedFilter = FilterType.all;  // Add a variable to store the selected filter type
 
   // Add filtering logic
   List<CategoryModel> getFilteredCategories() {
@@ -46,10 +50,32 @@ class _DestinationState extends State<Destination> {
         .toList();
   }
 
+  // Add sorting logic
+  void sortCategories() {
+    categories.sort((a, b) => isAscending
+        ? a.name.compareTo(b.name)
+        : b.name.compareTo(a.name));
+  }
+
+  void sortTravelCategories() {
+    travelCategories.sort((a, b) => isAscending
+        ? a.name.compareTo(b.name)
+        : b.name.compareTo(a.name));
+  }
+
+  void sortActivities() {
+    activities.sort((a, b) => isAscending
+        ? a.name.compareTo(b.name)
+        : b.name.compareTo(a.name));
+  }
+
   void _getCategoryInfo() {
     categories = CategoryModel.getCategories();
     travelCategories = TravelCategory.getTravelCategories();
     activities = ActivityModel.getActivities();
+    sortCategories();
+    sortTravelCategories();
+    sortActivities();
   }
 
   @override
@@ -61,19 +87,28 @@ class _DestinationState extends State<Destination> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(context),
       drawer: CustomDrawer(),
-      body: ListView(
-        children: [
-          _searchField(),
-          SizedBox(height: 40),
-          _categoriesSection(),  // Display filtered categories
-          SizedBox(height: 40),
-          _travelSection(),  // Display filtered travel categories
-          SizedBox(height: 40),
-          _activitiesSection(),  // Display filtered activities
-          SizedBox(height: 40),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _searchField(),
+            SizedBox(height: 40),
+            if (selectedFilter == FilterType.all || selectedFilter == FilterType.categories)
+              _categoriesSection(),  // Display filtered categories
+            if (selectedFilter == FilterType.all || selectedFilter == FilterType.popularDestinations)
+              Padding(
+                padding: const EdgeInsets.only(top: 40),  // Add spacing
+                child: _travelSection(),  // Display filtered travel categories
+              ),
+            if (selectedFilter == FilterType.all || selectedFilter == FilterType.activities)
+              Padding(
+                padding: const EdgeInsets.only(top: 40),  // Add spacing
+                child: _activitiesSection(),  // Display filtered activities
+              ),
+            SizedBox(height: 40),
+          ],
+        ),
       ),
     );
   }
@@ -277,6 +312,8 @@ class _DestinationState extends State<Destination> {
         ),
         SizedBox(height: 15),
         ListView.separated(
+          shrinkWrap: true, // Set shrinkWrap to true
+          physics: NeverScrollableScrollPhysics(), // Disable inner scrolling
           itemBuilder: (context, index) {
             return Container(
               height: 115,
@@ -334,7 +371,6 @@ class _DestinationState extends State<Destination> {
             );
           },
           separatorBuilder: (context, index) => SizedBox(height: 20),
-          shrinkWrap: true,
           itemCount: filteredActivities.length,
         ),
       ],
@@ -384,9 +420,35 @@ class _DestinationState extends State<Destination> {
                   indent: 10,
                   endIndent: 10,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(2),
-                  child: SvgPicture.asset("assets/icons/settings.svg"),
+                PopupMenuButton<String>(
+                  icon: SvgPicture.asset("assets/icons/settings.svg"),
+                  onSelected: (value) {
+                    setState(() {
+                      if (value == 'A-Z' || value == 'Z-A') {
+                        isAscending = value == 'A-Z';
+                        sortCategories();
+                        sortTravelCategories();
+                        sortActivities();
+                      } else if (value == 'All') {
+                        selectedFilter = FilterType.all;
+                      } else if (value == 'Categories') {
+                        selectedFilter = FilterType.categories;
+                      } else if (value == 'Popular Destinations') {
+                        selectedFilter = FilterType.popularDestinations;
+                      } else if (value == 'Activities') {
+                        selectedFilter = FilterType.activities;
+                      }
+                    });
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return {'A-Z', 'Z-A', 'All', 'Categories', 'Popular Destinations', 'Activities'}
+                        .map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  },
                 ),
               ],
             ),
@@ -400,60 +462,4 @@ class _DestinationState extends State<Destination> {
     );
   }
 }
-
-
-//   AppBar appBar(BuildContext context) {
-//     return AppBar(
-//       title: const Text(
-//         '',
-//         style: TextStyle(
-//           color: Colors.black,
-//           fontSize: 24,
-//           fontWeight: FontWeight.bold,
-//         ),
-//       ),
-//       backgroundColor: Colors.white,
-//       elevation: 0.0,
-//       centerTitle: true,
-//       leading: GestureDetector(
-//         onTap: () {
-//           Navigator.pop(context);
-//           Navigator.push(
-//               context, MaterialPageRoute(builder: (context) => MyApp()));
-//         },
-//         child: Container(
-//           margin: const EdgeInsets.all(10),
-//           alignment: Alignment.center,
-//           decoration: BoxDecoration(
-//             color: const Color(0xffF7F8F8),
-//             borderRadius: BorderRadius.circular(10),
-//           ),
-//           child: SvgPicture.asset(
-//             'assets/icons/arrow_left.svg',
-//             height: 20,
-//             width: 20,
-//           ),
-//         ),
-//       ),
-//       actions: [
-//         GestureDetector(
-//           onTap: () {},
-//           child: Container(
-//             margin: const EdgeInsets.all(10),
-//             alignment: Alignment.center,
-//             width: 37,
-//             decoration: BoxDecoration(
-//               color: const Color(0xffF7F8F8),
-//               borderRadius: BorderRadius.circular(10),
-//             ),
-//             child: SvgPicture.asset(
-//               'assets/icons/dots.svg',
-//               height: 20,
-//               width: 20,
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
 
