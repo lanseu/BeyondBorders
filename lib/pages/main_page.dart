@@ -41,6 +41,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var screenHeight = MediaQuery.of(context).size.height;
+    var screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -54,6 +57,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 title: onboardingData[index]["title"]!,
                 highlight: onboardingData[index]["highlight"]!,
                 description: onboardingData[index]["description"]!,
+                screenHeight: screenHeight,
+                screenWidth: screenWidth,
               );
             },
           ),
@@ -80,7 +85,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           // Page indicator and Get Started button
           Positioned(
-            bottom: 50,
+            bottom: screenHeight * 0.05,
             left: 0,
             right: 0,
             child: Column(
@@ -93,7 +98,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         (index) => buildDot(index: index),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: screenHeight * 0.03),
 
                 // Get Started Button (only on last page)
                 if (_currentPage == onboardingData.length - 1)
@@ -108,7 +113,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
-                        minimumSize: Size(250, 50),
+                        minimumSize: Size(screenWidth * 0.7, screenHeight * 0.07),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -144,43 +149,47 @@ class OnboardingPage extends StatelessWidget {
   final String title;
   final String highlight;
   final String description;
+  final double screenHeight;
+  final double screenWidth;
 
   const OnboardingPage({
     required this.image,
     required this.title,
     required this.highlight,
     required this.description,
+    required this.screenHeight,
+    required this.screenWidth,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(image, height: 500, fit: BoxFit.fill),
-          SizedBox(height: 30),
+          Image.asset(image, height: screenHeight * 0.5, fit: BoxFit.fill),
+          SizedBox(height: screenHeight * 0.05),
           RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
               children: [
                 TextSpan(
                   text: title + " ",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+                  style: TextStyle(fontSize: screenWidth * 0.06, fontWeight: FontWeight.bold, color: Colors.black),
                 ),
                 TextSpan(
                   text: highlight,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.orange),
+                  style: TextStyle(fontSize: screenWidth * 0.06, fontWeight: FontWeight.bold, color: Colors.orange),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 15),
+          SizedBox(height: screenHeight * 0.02),
           Text(
             description,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16, color: Colors.grey),
+            style: TextStyle(fontSize: screenWidth * 0.04, color: Colors.grey),
           ),
         ],
       ),

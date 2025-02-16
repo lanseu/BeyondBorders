@@ -16,7 +16,7 @@ class _LondonDestinationsState extends State<LondonDestinations> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(context, showBackButton: true),
       drawer: CustomDrawer(),
       body: SingleChildScrollView(
         child: Column(
