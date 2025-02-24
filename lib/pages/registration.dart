@@ -87,6 +87,18 @@ class _RegistrationFormState extends State<RegistrationForm> {
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool isChecked = false;
+  bool _obscurePassword = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fullNameController.addListener(() => setState(() {}));
+    _emailController.addListener(() => setState(() {}));
+    _phoneController.addListener(() => setState(() {}));
+    _dobController.addListener(() => setState(() {}));
+    _locationController.addListener(() => setState(() {}));
+    _passwordController.addListener(() => setState(() {}));
+  }
 
   String? _validateField(String? value, String fieldName) {
     if (value == null || value.isEmpty) {
@@ -179,31 +191,34 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
                 TextFormField(
                   controller: _fullNameController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'Full Name',
-                      labelStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
-                      border: OutlineInputBorder(
+                      labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+                      border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide.none,
-                      ), prefixIcon: Icon(Icons.person_outline)),
+                      ),
+                      prefixIcon: const Icon(Icons.person_outline),
+                      errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
                   validator: (value) => _validateField(value, 'full name'),
                 ),
                 const SizedBox(height: 20),
 
                 TextFormField(
                   controller: _emailController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Email Address',
-                    labelStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
-                    border: OutlineInputBorder(
+                    labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide.none,
                     ),
-                    prefixIcon: Icon(Icons.email_outlined),
+                    prefixIcon: const Icon(Icons.email_outlined),
+                    errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
                   ),
                   validator: _validateEmail,
                 ),
@@ -216,41 +231,36 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     FilteringTextInputFormatter.digitsOnly, // Allows only numbers
                     LengthLimitingTextInputFormatter(11),  // Limits input to 11 digits
                   ],
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Phone',
-                    labelStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
-                    border: OutlineInputBorder(
+                    labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide.none,
                     ),
-                    prefixIcon: Icon(Icons.phone_outlined),
+                    prefixIcon: const Icon(Icons.phone_outlined),
+                    errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter phone number';
-                    } else if (!RegExp(r'^\d{11}$').hasMatch(value)) {
-                      return 'Phone number must be exactly 11 digits';
-                    }
-                    return null;
-                  },
+                  validator: _validatePhone,
                 ),
                 const SizedBox(height: 20),
 
                 TextFormField(
                   controller: _dobController,
                   readOnly: true, // Prevents manual input
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Date of Birth',
-                    labelStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
-                    border: OutlineInputBorder(
+                    labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide.none,
                     ),
-                    prefixIcon: Icon(Icons.calendar_today_outlined),
+                    prefixIcon: const Icon(Icons.calendar_today_outlined),
+                    errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
                   ),
                   validator: (value) => value == null || value.isEmpty ? 'Please select date of birth' : null,
                   onTap: () => _selectDate(context), // Opens date picker when tapped
@@ -259,31 +269,45 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
                 TextFormField(
                   controller: _locationController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'Location',
-                      labelStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
-                      border: OutlineInputBorder(
+                      labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+                      border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide.none,
-                      ), prefixIcon: Icon(Icons.location_on_outlined)),
+                      ),
+                      prefixIcon: const Icon(Icons.location_on_outlined),
+                      errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
                   validator: (value) => _validateField(value, 'location'),
                 ),
                 const SizedBox(height: 20),
 
                 TextFormField(
                   controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'Password',
-                      labelStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
-                      border: OutlineInputBorder(
+                      labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+                      border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide.none,
-                      ), prefixIcon: Icon(Icons.lock_outline)),
+                      ),
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                      ),
+                      errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
                   validator: _validatePassword,
                 ),
                 const SizedBox(height: 5),
