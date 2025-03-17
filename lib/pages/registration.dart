@@ -6,10 +6,11 @@ import 'package:beyond_borders/pages/custom_appbar.dart';
 import 'main_page.dart';
 import 'package:beyond_borders/main.dart';
 import 'home.dart';
+import 'users_list_page.dart'; // Import the new users list page
+import 'package:beyond_borders/models/user_information.dart'; // Import the user information class
 
 class registration extends StatelessWidget {
   const registration({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,60 +21,8 @@ class registration extends StatelessWidget {
   }
 }
 
-AppBar appBar() {
-  return AppBar(
-    title: const Text(
-      'Registration',
-      style: TextStyle(
-        color: Colors.black,
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    backgroundColor: Colors.white,
-    elevation: 0.0,
-    centerTitle: true,
-    leading: GestureDetector(
-      onTap: () {},
-      child: Container(
-        margin: const EdgeInsets.all(10),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: const Color(0xffF7F8F8),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: SvgPicture.asset(
-          'assets/icons/arrow_left.svg',
-          height: 20,
-          width: 20,
-        ),
-      ),
-    ),
-    actions: [
-      GestureDetector(
-        onTap: () {},
-        child: Container(
-          margin: const EdgeInsets.all(10),
-          alignment: Alignment.center,
-          width: 37,
-          decoration: BoxDecoration(
-            color: const Color(0xffF7F8F8),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: SvgPicture.asset(
-            'assets/icons/dots.svg',
-            height: 20,
-            width: 20,
-          ),
-        ),
-      ),
-    ],
-  );
-}
-
 class RegistrationForm extends StatefulWidget {
   const RegistrationForm({super.key});
-
   @override
   _RegistrationFormState createState() => _RegistrationFormState();
 }
@@ -113,7 +62,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
     return null;
   }
 
-
   Future<void> _selectDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -121,7 +69,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
-
     if (pickedDate != null) {
       setState(() {
         _dobController.text = "${pickedDate.toLocal()}".split(' ')[0]; // Formats date
@@ -140,17 +87,30 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Registering...'))
+      // Create a new user with the form data
+      final newUser = UserInformation(
+        fullName: _fullNameController.text,
+        email: _emailController.text,
+        phone: _phoneController.text,
+        dateOfBirth: _dobController.text,
+        location: _locationController.text,
       );
 
+      // Add the new user to the global list
+      UserInformation.addUser(newUser);
+
+      // Show confirmation message
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Registration successful!'))
+      );
+
+      // Navigate to the users list page
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MyApp()),
+        MaterialPageRoute(builder: (context) => UsersListPage()),
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +126,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
               children: [
                 const Text('Create Account', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 20),
-
                 Text(
                   'Join Beyond Borders to start your journey',
                   style: TextStyle(
@@ -176,7 +135,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   ),
                 ),
                 const SizedBox(height: 25),
-
                 TextFormField(
                   controller: _fullNameController,
                   decoration: const InputDecoration(
@@ -191,7 +149,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   validator: (value) => _validateField(value, 'full name'),
                 ),
                 const SizedBox(height: 20),
-
                 TextFormField(
                   controller: _emailController,
                   decoration: const InputDecoration(
@@ -208,7 +165,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   validator: _validateEmail,
                 ),
                 const SizedBox(height: 20),
-
                 TextFormField(
                   controller: _phoneController,
                   keyboardType: TextInputType.number,
@@ -227,17 +183,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     ),
                     prefixIcon: Icon(Icons.phone_outlined),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter phone number';
-                    } else if (!RegExp(r'^\d{11}$').hasMatch(value)) {
-                      return 'Phone number must be exactly 11 digits';
-                    }
-                    return null;
-                  },
+                  validator: _validatePhone,
                 ),
                 const SizedBox(height: 20),
-
                 TextFormField(
                   controller: _dobController,
                   readOnly: true, // Prevents manual input
@@ -256,7 +204,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   onTap: () => _selectDate(context), // Opens date picker when tapped
                 ),
                 const SizedBox(height: 20),
-
                 TextFormField(
                   controller: _locationController,
                   decoration: const InputDecoration(
@@ -271,7 +218,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   validator: (value) => _validateField(value, 'location'),
                 ),
                 const SizedBox(height: 20),
-
                 TextFormField(
                   controller: _passwordController,
                   obscureText: true,
@@ -287,7 +233,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   validator: _validatePassword,
                 ),
                 const SizedBox(height: 5),
-
                 Row(
                   children: [
                     Checkbox(
@@ -303,7 +248,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   ],
                 ),
                 const SizedBox(height: 5),
-
                 ElevatedButton(
                   onPressed: isChecked ? _submitForm : null,
                   style: ElevatedButton.styleFrom(
@@ -317,9 +261,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   ),
                   child: const Text('Create Account'),
                 ),
-
                 const SizedBox(height: 25),
-
                 Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -337,11 +279,27 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   ),
                 ),
                 const SizedBox(height: 25),
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UsersListPage()),
+                      );
+                    },
+                    child: const Text(
+                      'View All Users',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
               ],
+            ),
           ),
-
         ),
-      ),
       ),
     );
   }
