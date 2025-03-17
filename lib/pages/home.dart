@@ -102,7 +102,8 @@ class _HomePageState extends State<HomePage> {
                 onPressed: _submitForm,
                 child: Text('On Board'),
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blue,
                   minimumSize: Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
@@ -121,7 +122,9 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => registration()), // Navigate to register page
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                Registration()), // Navigate to register page
                       );
                     },
                     child: Text(
