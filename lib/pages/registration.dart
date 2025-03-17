@@ -6,11 +6,12 @@ import 'package:beyond_borders/pages/custom_appbar.dart';
 import 'main_page.dart';
 import 'package:beyond_borders/main.dart';
 import 'home.dart';
-import 'users_list_page.dart'; // Import the new users list page
-import 'package:beyond_borders/models/user_information.dart'; // Import the user information class
+import 'users_list_page.dart';
+import 'user_detail_page.dart';
+import 'package:beyond_borders/models/user_information.dart';
 
-class registration extends StatelessWidget {
-  const registration({super.key});
+class Registration extends StatelessWidget {
+  const Registration({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +60,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter an email';
-    } else if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$').hasMatch(value)) {
+    } else if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
+        .hasMatch(value)) {
       return 'Please enter a valid email';
     }
     return null;
@@ -83,7 +85,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
     );
     if (pickedDate != null) {
       setState(() {
-        _dobController.text = "${pickedDate.toLocal()}".split(' ')[0]; // Formats date
+        _dobController.text =
+            "${pickedDate.toLocal()}".split(' ')[0]; // Formats date
       });
     }
   }
@@ -113,8 +116,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
       // Show confirmation message
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Registration successful!'))
-      );
+          const SnackBar(content: Text('Registration successful!')));
 
       // Navigate to the users list page
       Navigator.pushReplacement(
@@ -136,7 +138,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Create Account', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                const Text('Create Account',
+                    style:
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 20),
                 Text(
                   'Join Beyond Borders to start your journey',
@@ -153,13 +157,16 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'Full Name',
-                      labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+                      labelStyle: const TextStyle(
+                          color: Colors.grey, fontWeight: FontWeight.w600),
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide.none,
                       ),
                       prefixIcon: const Icon(Icons.person_outline),
-                      errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+                      errorStyle: const TextStyle(
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.bold)),
                   validator: (value) => _validateField(value, 'full name'),
                 ),
                 const SizedBox(height: 20),
@@ -169,13 +176,15 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Email Address',
-                    labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+                    labelStyle: const TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.w600),
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide.none,
                     ),
                     prefixIcon: const Icon(Icons.email_outlined),
-                    errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+                    errorStyle: const TextStyle(
+                        color: Colors.redAccent, fontWeight: FontWeight.bold),
                   ),
                   validator: _validateEmail,
                 ),
@@ -184,20 +193,24 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   controller: _phoneController,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly, // Allows only numbers
-                    LengthLimitingTextInputFormatter(11),  // Limits input to 11 digits
+                    FilteringTextInputFormatter
+                        .digitsOnly, // Allows only numbers
+                    LengthLimitingTextInputFormatter(
+                        11), // Limits input to 11 digits
                   ],
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Phone',
-                    labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+                    labelStyle: const TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.w600),
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide.none,
                     ),
                     prefixIcon: const Icon(Icons.phone_outlined),
-                    errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+                    errorStyle: const TextStyle(
+                        color: Colors.redAccent, fontWeight: FontWeight.bold),
                   ),
                   validator: _validatePhone,
                 ),
@@ -209,16 +222,21 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Date of Birth',
-                    labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+                    labelStyle: const TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.w600),
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide.none,
                     ),
                     prefixIcon: const Icon(Icons.calendar_today_outlined),
-                    errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+                    errorStyle: const TextStyle(
+                        color: Colors.redAccent, fontWeight: FontWeight.bold),
                   ),
-                  validator: (value) => value == null || value.isEmpty ? 'Please select date of birth' : null,
-                  onTap: () => _selectDate(context), // Opens date picker when tapped
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Please select date of birth'
+                      : null,
+                  onTap: () =>
+                      _selectDate(context), // Opens date picker when tapped
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
@@ -227,13 +245,16 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'Location',
-                      labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+                      labelStyle: const TextStyle(
+                          color: Colors.grey, fontWeight: FontWeight.w600),
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide.none,
                       ),
                       prefixIcon: const Icon(Icons.location_on_outlined),
-                      errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+                      errorStyle: const TextStyle(
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.bold)),
                   validator: (value) => _validateField(value, 'location'),
                 ),
                 const SizedBox(height: 20),
@@ -244,7 +265,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'Password',
-                      labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+                      labelStyle: const TextStyle(
+                          color: Colors.grey, fontWeight: FontWeight.w600),
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide.none,
@@ -252,7 +274,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
                         ),
                         onPressed: () {
                           setState(() {
@@ -260,7 +284,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           });
                         },
                       ),
-                      errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+                      errorStyle: const TextStyle(
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.bold)),
                   validator: _validatePassword,
                 ),
                 const SizedBox(height: 5),
@@ -275,7 +301,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         });
                       },
                     ),
-                    const Text('I agree to the Terms and Privacy Policy', style: TextStyle(fontWeight: FontWeight.w500)),
+                    const Text('I agree to the Terms and Privacy Policy',
+                        style: TextStyle(fontWeight: FontWeight.w500)),
                   ],
                 ),
                 const SizedBox(height: 5),
@@ -283,7 +310,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   onPressed: isChecked ? _submitForm : null,
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 60),
-                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -298,13 +326,22 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('Already have an account? ',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey[700])),
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[700])),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()));
                         },
                         child: const Text('Sign in',
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.blue)),
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue)),
                       ),
                     ],
                   ),
@@ -315,7 +352,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => UsersListPage()),
+                        MaterialPageRoute(
+                            builder: (context) => UsersListPage()),
                       );
                     },
                     child: const Text(

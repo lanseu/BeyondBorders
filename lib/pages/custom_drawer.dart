@@ -40,13 +40,16 @@ class CustomDrawer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: InkWell(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => OnboardingScreen())),
-              borderRadius: BorderRadius.circular(30), // Ripple effect respects radius
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => OnboardingScreen())),
+              borderRadius:
+                  BorderRadius.circular(30), // Ripple effect respects radius
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
                 decoration: BoxDecoration(
                   color: Colors.red.withOpacity(0.1), // Light red background
-                  borderRadius: BorderRadius.circular(30), // Fully rounded corners
+                  borderRadius:
+                      BorderRadius.circular(30), // Fully rounded corners
                 ),
                 child: Row(
                   children: [
@@ -73,7 +76,6 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 }
-
 
 class DrwHeader extends StatelessWidget {
   const DrwHeader({super.key});
@@ -124,7 +126,11 @@ class HoverListTile extends StatefulWidget {
   final String iconPath;
   final VoidCallback onTap;
 
-  const HoverListTile({super.key, required this.title, required this.iconPath, required this.onTap});
+  const HoverListTile(
+      {super.key,
+      required this.title,
+      required this.iconPath,
+      required this.onTap});
 
   @override
   _HoverListTileState createState() => _HoverListTileState();
@@ -167,7 +173,6 @@ class _HoverListTileState extends State<HoverListTile> {
   }
 }
 
-
 class DrwListView extends StatelessWidget {
   const DrwListView({super.key});
 
@@ -179,13 +184,15 @@ class DrwListView extends StatelessWidget {
         HoverListTile(
           title: "Home",
           iconPath: 'assets/icons/home_icon.svg',
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Destination())),
+          onTap: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Destination())),
         ),
         SizedBox(height: 10),
         HoverListTile(
           title: "Registration",
           iconPath: 'assets/icons/registration_icon.svg',
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => registration())),
+          onTap: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Registration())),
         ),
         // SizedBox(height: 10),
         // HoverListTile(
@@ -197,7 +204,8 @@ class DrwListView extends StatelessWidget {
         HoverListTile(
           title: "About",
           iconPath: 'assets/icons/about_icon.svg',
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => about())),
+          onTap: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => about())),
         ),
       ],
     );

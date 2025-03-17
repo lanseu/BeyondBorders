@@ -46,30 +46,31 @@ class _LondonDestinationsState extends State<LondonDestinations> {
               fit: BoxFit.cover,
             ),
             Positioned(
-                top: 20,
-                right: 20,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(100),
+              top: 20,
+              right: 20,
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: IconButton(
+                  icon: Icon(
+                    isFavourite
+                        ? Icons.favorite
+                        : Icons.favorite_border_outlined,
+                    color: Colors.red,
+                    size: 25,
                   ),
-                  child: IconButton(
-                    icon: Icon(
-                      isFavourite
-                          ? Icons.favorite
-                          : Icons.favorite_border_outlined,
-                      color: Colors.red,
-                      size: 25,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isFavourite = !isFavourite;
-                      });
-                    },
-                  ),
-                )),
+                  onPressed: () {
+                    setState(() {
+                      isFavourite = !isFavourite;
+                    });
+                  },
+                ),
+              ),
+            ),
           ],
         ));
   }
