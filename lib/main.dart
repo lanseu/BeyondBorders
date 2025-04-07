@@ -7,6 +7,7 @@ import 'package:beyond_borders/authentication/login.dart';
 import 'package:beyond_borders/authentication/main_page.dart';
 import 'package:beyond_borders/pages/destinations.dart';
 import 'package:beyond_borders/pages/about.dart';
+import 'package:beyond_borders/pages/profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/destinations': (context) => Destination(),
         '/about': (context) => about(),
         '/auth': (context) => AuthWrapper(),
+        '/profile': (context) => Profile(),
       },
     );
   }

@@ -1,4 +1,5 @@
 import 'package:beyond_borders/pages/london_destinations.dart';
+import 'package:beyond_borders/pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:beyond_borders/pages/about.dart';
@@ -12,7 +13,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      width: MediaQuery.of(context).size.width * 0.75, // Ensure correct width
+      width: MediaQuery.of(context).size.width * 0.75,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.horizontal(right: Radius.circular(30)),
       ),
@@ -31,8 +32,8 @@ class CustomDrawer extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 10), // Add some space after header
-          Expanded(child: DrwListView()), // Make ListView scrollable
+          SizedBox(height: 10),
+          Expanded(child: DrwListView()),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: Divider(),
@@ -189,17 +190,17 @@ class DrwListView extends StatelessWidget {
         ),
         SizedBox(height: 10),
         HoverListTile(
-          title: "Registration",
+          title: "Profile",
           iconPath: 'assets/icons/registration_icon.svg',
-          onTap: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Registration())),
+          onTap: () => Navigator.pushNamed(context, '/profile'),
         ),
-        // SizedBox(height: 10),
-        // HoverListTile(
-        //   title: "Destinations",
-        //   iconPath: 'assets/icons/destination_icon.svg',
-        //   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Destination())),
-        // ),
+        SizedBox(height: 10),
+        HoverListTile(
+          title: "Settings",
+          iconPath: 'assets/icons/destination_icon.svg',
+
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Destination())),
+        ),
         SizedBox(height: 10),
         HoverListTile(
           title: "About",

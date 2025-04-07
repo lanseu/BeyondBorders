@@ -10,31 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0c9ba616-a328-4d81-803f-288dd86b902e" name="Changes" comment="Android Fix">
-      <change afterPath="$PROJECT_DIR$/android/app/google-services.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/authentication/login.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/components/custom_appbar.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/services/auth_service.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/services/auth_wrapper.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/pages/profile.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/custom_drawer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/custom_drawer.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/about.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/about.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/custom_appbar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/authentication/custom_auth_appbar.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/custom_drawer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/custom_drawer.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/destinations.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/destinations.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/home.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/japan_destinations.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/japan_destinations.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/london_destinations.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/london_destinations.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/main_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/authentication/main_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/registration.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/authentication/registration.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/user_detail_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/user_detail_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/users_list_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/users_list_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/windows/flutter/generated_plugins.cmake" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,24 +55,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Flutter.main.dart.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "Berns",
-    "io.flutter.reload.alreadyRun": "true",
-    "kotlin-language-version-configured": "true",
-    "last_directory_selection": "C:/beyond_borders/android/app/src/main/kotlin",
-    "last_opened_file_path": "C:/beyond_borders/lib/authentication",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "show.migrate.to.gradle.popup": "false"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Flutter.main.dart.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Berns&quot;,
+    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;C:/beyond_borders/android/app/src/main/kotlin&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/beyond_borders/lib/authentication&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\beyond_borders\lib\authentication" />
