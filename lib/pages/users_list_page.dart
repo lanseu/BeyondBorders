@@ -69,12 +69,7 @@ class _UsersListPageState extends State<UsersListPage> {
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add function to create new user (not implemented in this example)
-        },
-        child: const Icon(Icons.add),
-      ),
+      
     );
   }
 }

@@ -30,18 +30,6 @@ class UserDetailPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        actions: [
-          // Add update button in app bar
-          IconButton(
-            icon: const Icon(Icons.edit, color: Colors.black),
-            onPressed: () => _showUpdateDialog(context),
-          ),
-          // Add delete button in app bar
-          IconButton(
-            icon: const Icon(Icons.delete, color: Colors.red),
-            onPressed: () => _showDeleteConfirmation(context),
-          ),
-        ],
       ),
       body: Container(
         color: Colors.grey[100],
@@ -116,7 +104,7 @@ class UserDetailPage extends StatelessWidget {
     );
   }
 
-  // Method to show update dialog
+  // firMethod to show update dialog
   void _showUpdateDialog(BuildContext context) {
     // Create form controllers with initial values
     final nameController = TextEditingController(text: user.fullName);
