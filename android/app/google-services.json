@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "787259746807",
+    "project_id": "beyond-borders-f087e",
+    "storage_bucket": "beyond-borders-f087e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787259746807:android:ebff8886b1a8465da4a6f2",
+        "android_client_info": {
+          "package_name": "com.example.beyond_borders"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY9ozA6xSQ6VVwTddADSTsAFZwzWQrmQc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

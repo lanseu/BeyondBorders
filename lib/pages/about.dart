@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:beyond_borders/pages/custom_drawer.dart';
-import 'package:beyond_borders/pages/custom_appbar.dart';
+import 'package:beyond_borders/components/custom_drawer.dart';
+import 'package:beyond_borders/components/custom_appbar.dart';
 
 class about extends StatelessWidget {
   const about({super.key});
