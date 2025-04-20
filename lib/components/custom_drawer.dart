@@ -208,6 +208,12 @@ class DrwListView extends StatelessWidget {
           onTap: () => Navigator.push(
               context, MaterialPageRoute(builder: (context) => about())),
         ),
+        SizedBox(height: 10),
+        HoverListTile(
+          title: "Community",
+          iconPath: 'assets/icons/community.svg',
+          onTap: () => Navigator.pushNamed(context, '/community'),
+        ),
       ],
     );
   }
