@@ -44,6 +44,8 @@ dependencies:
   cached_network_image: ^3.3.1
   intl: ^0.20.2
   firebase_database: 11.3.5
+  path_provider: ^2.0.10
+  image: ^4.0.17
 
 dev_dependencies:
   flutter_test:
@@ -98,6 +100,7 @@ flutter:
     - assets/icons/about_feature.svg
     - assets/icons/destinations_detail_clock.svg
     - assets/icons/destinations_detail_family.svg
+    - assets/icons/beyondBorders.png
     - assets/images/avatar.jpg
     - assets/images/onboarding1.png
     - assets/images/onboarding2.png
