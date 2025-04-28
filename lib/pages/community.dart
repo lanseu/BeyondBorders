@@ -43,11 +43,18 @@ class _CommunityPageState extends State<CommunityPage> {
   File? _imageFile;
   String _currentLocation = '';
 
+  // Theme colors for Twitter/Threads style
+  final Color _primaryColor = const Color(0xFF1DA1F2); // Twitter blue
+  final Color _lightGrayColor = const Color(0xFFE1E8ED);
+  final Color _mediumGrayColor = const Color(0xFFAAB8C2);
+  final Color _darkGrayColor = const Color(0xFF657786);
+  final Color _textColor = const Color(0xFF14171A);
+
   @override
   void initState() {
     super.initState();
     _database.databaseURL =
-    'https://beyond-borders-457415-default-rtdb.asia-southeast1.firebasedatabase.app/';
+        'https://beyond-borders-457415-default-rtdb.asia-southeast1.firebasedatabase.app/';
     _postsRef = _database.ref().child('posts');
     _usersRef = _database.ref().child('users');
     _fetchCurrentUserData();
@@ -63,7 +70,8 @@ class _CommunityPageState extends State<CommunityPage> {
           .get();
 
       if (userSnapshot.exists && userSnapshot.data() != null) {
-        Map<String, dynamic>? userData = userSnapshot.data() as Map<String, dynamic>?;
+        Map<String, dynamic>? userData =
+            userSnapshot.data() as Map<String, dynamic>?;
         if (userData != null) {
           setState(() {
             _currentUserFullName = userData['fullName'] ?? 'User';
@@ -107,13 +115,11 @@ class _CommunityPageState extends State<CommunityPage> {
 
   Future<void> _pickImage() async {
     try {
-      final XFile? pickedFile =
-      await _picker.pickImage(
+      final XFile? pickedFile = await _picker.pickImage(
           source: ImageSource.gallery,
           imageQuality: 70,
           maxWidth: 1200,
-          maxHeight: 1200
-      );
+          maxHeight: 1200);
       if (pickedFile != null) {
         setState(() {
           _imageFile = File(pickedFile.path);
@@ -131,7 +137,7 @@ class _CommunityPageState extends State<CommunityPage> {
   Future<void> _takePhoto() async {
     try {
       final XFile? pickedFile =
-      await _picker.pickImage(source: ImageSource.camera, imageQuality: 70);
+          await _picker.pickImage(source: ImageSource.camera, imageQuality: 70);
       if (pickedFile != null) {
         setState(() {
           _imageFile = File(pickedFile.path);
@@ -148,7 +154,8 @@ class _CommunityPageState extends State<CommunityPage> {
 
   Future<File> compressImage(File file) async {
     final tempDir = await getTemporaryDirectory();
-    final targetPath = '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final targetPath =
+        '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
 
     // Read the file
     final image = img.decodeImage(await file.readAsBytes());
@@ -199,7 +206,7 @@ class _CommunityPageState extends State<CommunityPage> {
         String locality = place.locality ?? '';
         String adminArea = place.administrativeArea ?? '';
         _currentLocation =
-        locality.isNotEmpty ? "$locality, $adminArea" : adminArea;
+            locality.isNotEmpty ? "$locality, $adminArea" : adminArea;
 
         setState(() {
           _locationController.text = _currentLocation;
@@ -218,7 +225,8 @@ class _CommunityPageState extends State<CommunityPage> {
   Future<void> _createPost() async {
     if (_postTextController.text.trim().isEmpty && _imageFile == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please add some text or an image to your post')),
+        const SnackBar(
+            content: Text('Please add some text or an image to your post')),
       );
       return;
     }
@@ -301,7 +309,14 @@ class _CommunityPageState extends State<CommunityPage> {
       Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Post created successfully!')),
+        SnackBar(
+          content: const Text('Post created successfully!'),
+          backgroundColor: _primaryColor,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+        ),
       );
     } catch (e) {
       setState(() {
@@ -324,7 +339,7 @@ class _CommunityPageState extends State<CommunityPage> {
       }
 
       DatabaseReference likedByRef =
-      _postsRef.child(post.id).child('likedBy').child(currentUser.uid);
+          _postsRef.child(post.id).child('likedBy').child(currentUser.uid);
 
       DatabaseReference likesRef = _postsRef.child(post.id).child('likes');
 
@@ -347,24 +362,31 @@ class _CommunityPageState extends State<CommunityPage> {
   Future<void> _deletePost(Post post) async {
     // Show confirmation dialog before deleting
     bool confirmDelete = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Delete Post'),
-          content: const Text('Are you sure you want to delete this post? This action cannot be undone.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('Delete', style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        );
-      },
-    ) ?? false;
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Delete Post'),
+              content: const Text(
+                  'Are you sure you want to delete this post? This action cannot be undone.'),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child:
+                      Text('Cancel', style: TextStyle(color: _darkGrayColor)),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child:
+                      const Text('Delete', style: TextStyle(color: Colors.red)),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
 
     // If user didn't confirm, return
     if (!confirmDelete) return;
@@ -395,7 +417,14 @@ class _CommunityPageState extends State<CommunityPage> {
       await _postsRef.child(post.id).remove();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Post deleted successfully')),
+        SnackBar(
+          content: const Text('Post deleted successfully'),
+          backgroundColor: _primaryColor,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+        ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -407,31 +436,47 @@ class _CommunityPageState extends State<CommunityPage> {
   Future<void> _showImageOptions() async {
     showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (BuildContext context) {
         return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Choose from Gallery'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _pickImage();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: const Text('Take a Photo'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _takePhoto();
-                },
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 20),
+                  decoration: BoxDecoration(
+                    color: _mediumGrayColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(Icons.photo_library, color: _primaryColor),
+                  title: Text('Choose from Gallery',
+                      style: TextStyle(color: _textColor)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _pickImage();
+                  },
+                ),
+                const Divider(height: 0.5),
+                ListTile(
+                  leading: Icon(Icons.camera_alt, color: _primaryColor),
+                  title:
+                      Text('Take a Photo', style: TextStyle(color: _textColor)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _takePhoto();
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -443,8 +488,10 @@ class _CommunityPageState extends State<CommunityPage> {
       context,
       MaterialPageRoute(
         builder: (context) => Scaffold(
+          extendBodyBehindAppBar: true,
           appBar: AppBar(
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
             iconTheme: const IconThemeData(color: Colors.white),
           ),
           backgroundColor: Colors.black,
@@ -457,7 +504,7 @@ class _CommunityPageState extends State<CommunityPage> {
               child: CachedNetworkImage(
                 imageUrl: imageUrl,
                 placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(color: Colors.white70),
                 ),
                 errorWidget: (context, url, error) => const Center(
                   child: Column(
@@ -491,360 +538,577 @@ class _CommunityPageState extends State<CommunityPage> {
       context: context,
       barrierColor: Colors.black54,
       builder: (BuildContext context) {
-        return StatefulBuilder(
-            builder: (dialogContext, setDialogState) {
-              return Dialog(
-                insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 36),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                elevation: 0,
-                backgroundColor: Colors.white,
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(top: 32, left: 16, right: 16, bottom: 16),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Profile and input section
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Profile avatar
-                          CircleAvatar(
-                            radius: 24,
-                            backgroundImage: _currentUserProfileImage.isNotEmpty
-                                ? NetworkImage(_currentUserProfileImage)
-                                : null,
-                            backgroundColor: Colors.blue,
-                            child: _currentUserProfileImage.isEmpty
-                                ? const Icon(Icons.person, size: 24, color: Colors.white)
-                                : null,
+        return StatefulBuilder(builder: (dialogContext, setDialogState) {
+          return Dialog(
+            insetPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 36),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+            elevation: 0,
+            backgroundColor: Colors.white,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header - New Post
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'New Post',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: _textColor,
                           ),
-                          const SizedBox(width: 12),
-                          // Text input field
-                          Expanded(
-                            child: TextField(
-                              controller: _postTextController,
-                              decoration: const InputDecoration(
-                                hintText: 'What is up traveler?',
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                isDense: true,
-                                contentPadding: EdgeInsets.symmetric(vertical: 8),
+                        ),
+                        // Close button
+                        IconButton(
+                          icon: Icon(Icons.close, color: _darkGrayColor),
+                          onPressed: () => Navigator.pop(context),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const Divider(),
+
+                  // Profile and input section
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Profile avatar
+                        CircleAvatar(
+                          radius: 24,
+                          backgroundImage: _currentUserProfileImage.isNotEmpty
+                              ? NetworkImage(_currentUserProfileImage)
+                              : null,
+                          backgroundColor: _primaryColor,
+                          child: _currentUserProfileImage.isEmpty
+                              ? const Icon(Icons.person,
+                                  size: 24, color: Colors.white)
+                              : null,
+                        ),
+                        const SizedBox(width: 12),
+                        // Text input field
+                        Expanded(
+                          child: TextField(
+                            controller: _postTextController,
+                            decoration: InputDecoration(
+                              hintText: 'What\'s happening?',
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(
+                                color: _mediumGrayColor,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
                               ),
-                              style: const TextStyle(fontSize: 18),
-                              maxLines: 8,
-                              minLines: 1,
+                              isDense: true,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 8),
+                            ),
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: _textColor,
+                            ),
+                            maxLines: 8,
+                            minLines: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Image preview if selected
+                  if (_imageFile != null)
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: _lightGrayColor),
+                      ),
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.file(
+                              _imageFile!,
+                              height: 250,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      // Location input with rounded border
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(color: Colors.grey.shade300),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: _locationController,
-                                decoration: const InputDecoration(
-                                  hintText: 'Where you at?',
-                                  border: InputBorder.none,
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                _getCurrentLocation();
-                              },
-                              child: const Icon(Icons.location_on_outlined),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // Image preview if selected
-                      if (_imageFile != null)
-                        Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.file(
-                                _imageFile!,
-                                height: 200,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                                shadows: [
-                                  Shadow(blurRadius: 3.0, color: Colors.black),
-                                ],
-                              ),
-                              onPressed: () {
-                                setDialogState(() {
-                                  _imageFile = null;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-
-                      const SizedBox(height: 16),
-
-                      // Upload progress indicator
-                      if (_isPostingLoading && _uploadProgress > 0 && _uploadProgress < 1)
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Uploading image: ${(_uploadProgress * 100).toStringAsFixed(0)}%'),
-                            const SizedBox(height: 4),
-                            LinearProgressIndicator(value: _uploadProgress),
-                            const SizedBox(height: 16),
-                          ],
-                        ),
-
-                      // Bottom row with image picker and post button
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Image picker button
                           GestureDetector(
                             onTap: () {
-                              _showImageOptions().then((_) {
-                                // Update dialog state after image is selected
-                                setDialogState(() {});
+                              setDialogState(() {
+                                _imageFile = null;
                               });
                             },
                             child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.blue.shade100,
-                                borderRadius: BorderRadius.circular(8),
+                              margin: const EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: Colors.black45,
+                                shape: BoxShape.circle,
                               ),
-                              padding: const EdgeInsets.all(8),
                               child: const Icon(
-                                Icons.image,
-                                color: Colors.blue,
-                                size: 24,
-                              ),
-                            ),
-                          ),
-
-                          // Loading indicator (center)
-                          if (_isPostingLoading && (_uploadProgress == 0 || _uploadProgress == 1))
-                            const CircularProgressIndicator(),
-
-                          // Post button
-                          ElevatedButton(
-                            onPressed: _isPostingLoading ? null : () {
-                              _createPost();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                                vertical: 12,
-                              ),
-                            ),
-                            child: const Text(
-                              'Post',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                                Icons.close,
+                                color: Colors.white,
+                                size: 20,
                               ),
                             ),
                           ),
                         ],
                       ),
-                    ],
+                    ),
+
+                  // Location input with rounded border
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(24),
+                      color: _lightGrayColor.withOpacity(0.5),
+                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: Row(
+                      children: [
+                        Icon(Icons.location_on_outlined,
+                            color: _primaryColor, size: 20),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: TextField(
+                            controller: _locationController,
+                            decoration: InputDecoration(
+                              hintText: 'Add location',
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(color: _darkGrayColor),
+                              isDense: true,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 8),
+                            ),
+                            style: TextStyle(color: _textColor),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: _getCurrentLocation,
+                          child: Icon(Icons.my_location,
+                              color: _primaryColor, size: 20),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }
-        );
+
+                  // Upload progress indicator
+                  if (_isPostingLoading &&
+                      _uploadProgress > 0 &&
+                      _uploadProgress < 1)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Uploading image: ${(_uploadProgress * 100).toStringAsFixed(0)}%',
+                          style: TextStyle(color: _darkGrayColor, fontSize: 12),
+                        ),
+                        const SizedBox(height: 4),
+                        LinearProgressIndicator(
+                          value: _uploadProgress,
+                          backgroundColor: _lightGrayColor,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(_primaryColor),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                    ),
+
+                  const Divider(),
+
+                  // Bottom row with image picker and post button
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Image picker button
+                        GestureDetector(
+                          onTap: () {
+                            _showImageOptions().then((_) {
+                              // Update dialog state after image is selected
+                              setDialogState(() {});
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: _primaryColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.all(10),
+                            child: Icon(
+                              Icons.image,
+                              color: _primaryColor,
+                              size: 24,
+                            ),
+                          ),
+                        ),
+
+                        // Loading indicator (center)
+                        if (_isPostingLoading &&
+                            (_uploadProgress == 0 || _uploadProgress == 1))
+                          CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(_primaryColor),
+                            strokeWidth: 3,
+                          ),
+
+                        // Post button
+                        ElevatedButton(
+                          onPressed: _isPostingLoading ? null : _createPost,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _primaryColor,
+                            foregroundColor: Colors.white,
+                            disabledBackgroundColor:
+                                _primaryColor.withOpacity(0.5),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                            elevation: 0,
+                          ),
+                          child: const Text(
+                            'Post',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
       },
+    );
+  }
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      centerTitle: true,
+      title: Text(
+        'Community',
+        style: TextStyle(
+          color: _textColor,
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
+      ),
+      iconTheme: IconThemeData(color: _darkGrayColor),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.notifications_outlined, color: _darkGrayColor),
+          onPressed: () {
+            // Add notification functionality here
+          },
+        ),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: buildAppBar(context),
       drawer: const CustomDrawer(),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator(color: _primaryColor))
           : _posts.isEmpty
-          ? const Center(child: Text('No posts yet. Be the first to share!'))
-          : RefreshIndicator(
-        onRefresh: () async {
-          setState(() {
-            _isLoading = true;
-          });
-          _fetchPosts();
-        },
-        child: ListView.builder(
-          itemCount: _posts.length,
-          itemBuilder: (context, index) {
-            Post post = _posts[index];
-            bool userLiked = _auth.currentUser != null &&
-                post.likedBy.contains(_auth.currentUser!.uid);
-            bool isOwner = _auth.currentUser != null &&
-                _auth.currentUser!.uid == post.userId;
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.chat_bubble_outline,
+                          size: 64, color: _mediumGrayColor),
+                      const SizedBox(height: 16),
+                      Text(
+                        'No posts yet',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: _textColor,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Be the first to share something!',
+                        style: TextStyle(
+                          color: _darkGrayColor,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : RefreshIndicator(
+                  color: _primaryColor,
+                  onRefresh: () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    _fetchPosts();
+                  },
+                  child: ListView.separated(
+                    itemCount: _posts.length,
+                    separatorBuilder: (context, index) =>
+                        const Divider(height: 1, thickness: 0.5),
+                    padding: const EdgeInsets.all(10),
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      Post post = _posts[index];
+                      bool userLiked = _auth.currentUser != null &&
+                          post.likedBy.contains(_auth.currentUser!.uid);
+                      bool isOwner = _auth.currentUser != null &&
+                          _auth.currentUser!.uid == post.userId;
 
-            return Card(
-              margin: const EdgeInsets.symmetric(
-                  vertical: 8, horizontal: 12),
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage:
-                      post.userProfileImage.isNotEmpty
-                          ? NetworkImage(post.userProfileImage)
-                          : null,
-                      backgroundColor: Colors.blue,
-                      child: post.userProfileImage.isEmpty
-                          ? const Icon(Icons.person, color: Colors.white)
-                          : null,
-                    ),
-                    title: Text(
-                      post.fullName,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: post.location.isNotEmpty
-                        ? Row(
-                      children: [
-                        const Icon(Icons.location_on, size: 14),
-                        const SizedBox(width: 4),
-                        Expanded(child: Text(post.location, maxLines: 1, overflow: TextOverflow.ellipsis)),
-                      ],
-                    )
-                        : null,
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          _formatTimestamp(post.timestamp),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                        if (isOwner)
-                          PopupMenuButton(
-                            icon: const Icon(Icons.more_vert),
-                            itemBuilder: (context) => [
-                              const PopupMenuItem(
-                                value: 'delete',
-                                child: Text('Delete'),
+                      return Container(
+                        color: Colors.white,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 16, right: 16, top: 16, bottom: 8),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // User avatar
+                                  CircleAvatar(
+                                    radius: 24,
+                                    backgroundImage: post
+                                            .userProfileImage.isNotEmpty
+                                        ? NetworkImage(post.userProfileImage)
+                                        : null,
+                                    backgroundColor: _primaryColor,
+                                    child: post.userProfileImage.isEmpty
+                                        ? const Icon(Icons.person,
+                                            color: Colors.white)
+                                        : null,
+                                  ),
+                                  const SizedBox(width: 12),
+
+                                  // Content column
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Header row with name and time
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    post.fullName,
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: _textColor,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 4),
+                                                  // Verified badge if needed
+                                                  // Icon(Icons.verified, color: _primaryColor, size: 16),
+                                                  const SizedBox(width: 4),
+                                                  Text(
+                                                    '· ${_formatTimestamp(post.timestamp)}',
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: _darkGrayColor,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            if (isOwner)
+                                              GestureDetector(
+                                                onTap: () => _deletePost(post),
+                                                child: Icon(
+                                                  Icons.more_horiz,
+                                                  color: _darkGrayColor,
+                                                  size: 20,
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+
+                                        // Location if available
+                                        if (post.location.isNotEmpty)
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 2, bottom: 6),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.location_on,
+                                                  size: 14,
+                                                  color: _darkGrayColor,
+                                                ),
+                                                const SizedBox(width: 4),
+                                                Expanded(
+                                                  child: Text(
+                                                    post.location,
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: _darkGrayColor,
+                                                    ),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+
+                                        // Post text content
+                                        if (post.text.isNotEmpty)
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 8, bottom: 12),
+                                            child: Text(
+                                              post.text,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: _textColor,
+                                                height: 1.3,
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                            onSelected: (value) {
-                              if (value == 'delete') {
-                                _deletePost(post);
-                              }
-                            },
-                          ),
-                      ],
-                    ),
-                  ),
-                  if (post.text.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      child: Text(post.text),
-                    ),
-                  if (post.imageUrl != null &&
-                      post.imageUrl!.isNotEmpty)
-                    GestureDetector(
-                      onTap: () => _viewImage(post.imageUrl!),
-                      child: Container(
-                        constraints: const BoxConstraints(
-                          maxHeight: 400,
-                        ),
-                        width: double.infinity,
-                        child: CachedNetworkImage(
-                          imageUrl: post.imageUrl!,
-                          placeholder: (context, url) => const Center(
-                            child: SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: CircularProgressIndicator(),
                             ),
-                          ),
-                          errorWidget: (context, url, error) => Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.error, color: Colors.red),
-                                const SizedBox(height: 4),
-                                Text('Image load error: $error', style: const TextStyle(fontSize: 12)),
-                              ],
+
+                            // Post image if available
+                            if (post.imageUrl != null &&
+                                post.imageUrl!.isNotEmpty)
+                              GestureDetector(
+                                onTap: () => _viewImage(post.imageUrl!),
+                                child: Container(
+                                  constraints:
+                                      const BoxConstraints(maxHeight: 400),
+                                  width: double.infinity,
+                                  child: CachedNetworkImage(
+                                    imageUrl: post.imageUrl!,
+                                    placeholder: (context, url) => Container(
+                                      height: 200,
+                                      color: _lightGrayColor.withOpacity(0.5),
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  _primaryColor),
+                                          strokeWidth: 3,
+                                        ),
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        Container(
+                                      height: 200,
+                                      color: _lightGrayColor.withOpacity(0.5),
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Icon(Icons.error,
+                                                color: Colors.red),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              'Failed to load image',
+                                              style: TextStyle(
+                                                  color: _darkGrayColor),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+
+                            // Post interaction buttons
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Like button
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => _toggleLike(post),
+                                        child: Icon(
+                                          userLiked
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color: userLiked
+                                              ? Colors.red
+                                              : _darkGrayColor,
+                                          size: 20,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        '${post.likes}',
+                                        style: TextStyle(
+                                          color: _darkGrayColor,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          fit: BoxFit.cover,
+                          ],
                         ),
-                      ),
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            userLiked
-                                ? Icons.thumb_up
-                                : Icons.thumb_up_outlined,
-                            color: userLiked ? Colors.blue : null,
-                          ),
-                          onPressed: () => _toggleLike(post),
-                        ),
-                        Text('${post.likes}'),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
+                ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showCreatePostPopup,
-        backgroundColor: Colors.blue,
+        backgroundColor: _primaryColor,
         foregroundColor: Colors.white,
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
         child: const Icon(Icons.add),
       ),
     );
@@ -858,13 +1122,13 @@ class _CommunityPageState extends State<CommunityPage> {
     Duration difference = now.difference(postTime);
 
     if (difference.inDays > 7) {
-      return DateFormat('MMM d, yyyy').format(postTime);
+      return DateFormat('MMM d').format(postTime);
     } else if (difference.inDays > 0) {
-      return '${difference.inDays}d ago';
+      return '${difference.inDays}d';
     } else if (difference.inHours > 0) {
-      return '${difference.inHours}h ago';
+      return '${difference.inHours}h';
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}m ago';
+      return '${difference.inMinutes}m';
     } else {
       return 'Just now';
     }
