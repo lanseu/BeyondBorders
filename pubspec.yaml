@@ -111,6 +111,30 @@ flutter:
     - assets/animations/beyond_borders_main.json
     - assets/animations/success.json
     - assets/animations/loading.json
+    - assets/images/bali.jpg
+    - assets/images/central_park.jpg
+    - assets/images/paris.jpg
+    - assets/images/santorini.jpg
+    - assets/images/tokyo.jpg
+    - assets/images/rome.jpg
+    - assets/images/new_york.jpg
+    - assets/images/sydney.jpg
+    - assets/images/cape_town.jpg
+    - assets/images/dubai.jpg
+    - assets/images/london.jpeg
+    - assets/images/barcelona.jpg
+    - assets/images/istanbul.jpg
+    - assets/images/banff.jpg
+    - assets/images/amalfi_coast.jpg
+    - assets/images/kyoto.jpg
+    - assets/images/queenstown.jpg
+    - assets/images/boracay.png
+    - assets/images/rio.jpg
+    - assets/images/athens.jpg
+    - assets/images/pyramid.jpg
+    - assets/images/intramuros.jpg
+    - assets/images/rizal_park.jpg
+
 
   fonts:
     - family: Poppins
