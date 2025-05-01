@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:beyond_borders/models/activities.dart';
@@ -7,6 +9,8 @@ import 'package:beyond_borders/components/custom_drawer.dart';
 import 'package:beyond_borders/components/custom_appbar.dart';
 import 'package:beyond_borders/pages/london_destinations.dart';
 import 'package:beyond_borders/pages/japan_destinations.dart';
+
+import 'all_popular_destinations.dart';
 
 enum FilterType { all, categories, popularDestinations, activities }
 
@@ -21,11 +25,196 @@ class _DestinationState extends State<Destination> {
   List<CategoryModel> categories = [];
   List<TravelCategory> travelCategories = [];
   List<ActivityModel> activities = [];
-  String searchQuery = '';  // Add a variable to store the search query
-  bool isAscending = true;  // Add a variable to store the sorting order
-  FilterType selectedFilter = FilterType.all;  // Add a variable to store the selected filter type
+  String searchQuery = '';
+  bool isAscending = true;
+  FilterType selectedFilter = FilterType.all;
+  final PageController _pageController = PageController(viewportFraction: 0.85);
+  int _currentFeaturedIndex = 0;
+  Timer? _carouselTimer;
 
-  // Add filtering logic
+
+  void _startAutoScroll() {
+    _carouselTimer = Timer.periodic(Duration(seconds: 3), (timer) {
+      if (_pageController.hasClients) {
+        int nextPage = _pageController.page!.round() + 1;
+        if (nextPage >= featuredDestinations.length) {
+          nextPage = 0; // Loop back to first
+        }
+        _pageController.animateToPage(
+          nextPage,
+          duration: Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
+
+
+  final List<Map<String, dynamic>> featuredDestinations = [
+    {
+      'image': 'assets/images/paris.jpg',
+      'name': 'Paris',
+      'description': 'The city of lights and romance',
+      'days': '4-5 days',
+      'rating': 4.8,
+    },
+    {
+      'image': 'assets/images/tokyo.jpg',
+      'name': 'Tokyo',
+      'description': 'A bustling city blending tradition and technology',
+      'days': '5-7 days',
+      'rating': 4.7,
+    },
+    {
+      'image': 'assets/images/new_york.jpg',
+      'name': 'New York',
+      'description': 'The city that never sleeps',
+      'days': '3-5 days',
+      'rating': 4.6,
+    },
+    {
+      'image': 'assets/images/rome.jpg',
+      'name': 'Rome',
+      'description': 'Historic city of ancient wonders',
+      'days': '4-6 days',
+      'rating': 4.7,
+    },
+    {
+      'image': 'assets/images/sydney.jpg',
+      'name': 'Sydney',
+      'description': 'Home of the iconic Opera House',
+      'days': '4-5 days',
+      'rating': 4.5,
+    },
+    {
+      'image': 'assets/images/cape_town.jpg',
+      'name': 'Cape Town',
+      'description': 'Beautiful coastal city with Table Mountain',
+      'days': '5-6 days',
+      'rating': 4.6,
+    },
+    {
+      'image': 'assets/images/dubai.jpg',
+      'name': 'Dubai',
+      'description': 'City of skyscrapers, shopping, and desert safaris',
+      'days': '3-4 days',
+      'rating': 4.5,
+    },
+    {
+      'image': 'assets/images/london.jpeg',
+      'name': 'London',
+      'description': 'Historic landmarks and modern vibes',
+      'days': '4-5 days',
+      'rating': 4.7,
+    },
+    {
+      'image': 'assets/images/barcelona.jpg',
+      'name': 'Barcelona',
+      'description': 'Art, architecture, and Mediterranean beaches',
+      'days': '4-6 days',
+      'rating': 4.6,
+    },
+    {
+      'image': 'assets/images/istanbul.jpg',
+      'name': 'Istanbul',
+      'description': 'Where East meets West',
+      'days': '5-6 days',
+      'rating': 4.7,
+    }
+
+
+  ];
+
+  final List<Map<String, dynamic>> popularDestinations = [
+    {
+      'image': 'assets/images/bali.jpg',
+      'name': 'Bali',
+      'country': 'Indonesia',
+      'price': '\$80',
+      'rating': 4.7,
+    },
+    {
+      'image': 'assets/images/santorini.jpg',
+      'name': 'Santorini',
+      'country': 'Greece',
+      'price': '\$350',
+      'rating': 4.9,
+    },
+    {
+      'image': 'assets/images/banff.jpg',
+      'name': 'Banff',
+      'country': 'Canada',
+      'price': '\$150',
+      'rating': 4.8,
+    },
+    {
+      'image': 'assets/images/amalfi_coast.jpg',
+      'name': 'Amalfi Coast',
+      'country': 'Italy',
+      'price': '\$270',
+      'rating': 4.9,
+    },
+    {
+      'image': 'assets/images/kyoto.jpg',
+      'name': 'Kyoto',
+      'country': 'Japan',
+      'price': '\$190',
+      'rating': 4.7,
+    },
+    {
+      'image': 'assets/images/queenstown.jpg',
+      'name': 'Queenstown',
+      'country': 'New Zealand',
+      'price': '\$210',
+      'rating': 4.8,
+    },
+    {
+      'image': 'assets/images/boracay.png',
+      'name': 'Boracay',
+      'country': 'Philippines',
+      'price': '\$300',
+      'rating': 4.6,
+    },
+    {
+      'image': 'assets/images/rio.jpg',
+      'name': 'Rio de Janeiro',
+      'country': 'Brazil',
+      'price': '\$200',
+      'rating': 4.6,
+    },
+    {
+      'image': 'assets/images/athens.jpg',
+      'name': 'Athens',
+      'country': 'Greece',
+      'price': '\$180',
+      'rating': 4.7,
+    },
+    {
+      'image': 'assets/images/pyramid.jpg',
+      'name': 'Egyptian pyramids',
+      'country': 'Egypt',
+      'price': '\$170',
+      'rating': 4.5,
+    },
+
+  ];
+
+  final List<Map<String, dynamic>> nearbyAttractions = [
+    {
+      'image': 'assets/images/rizal_park.jpg',
+      'name': 'Rizal Park',
+      'distance': '2.0 km',
+      'rating': 4.6,
+    },
+    {
+      'image': 'assets/images/intramuros.jpg',
+      'name': 'Intramuros',
+      'distance': '2.5 km',
+      'rating': 4.7,
+    },
+  ];
+
   List<CategoryModel> getFilteredCategories() {
     return categories
         .where((category) => category.name
@@ -50,7 +239,6 @@ class _DestinationState extends State<Destination> {
         .toList();
   }
 
-  // Add sorting logic
   void sortCategories() {
     categories.sort((a, b) => isAscending
         ? a.name.compareTo(b.name)
@@ -82,7 +270,16 @@ class _DestinationState extends State<Destination> {
   void initState() {
     _getCategoryInfo();
     super.initState();
+    _startAutoScroll();
   }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _carouselTimer?.cancel();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -91,305 +288,51 @@ class _DestinationState extends State<Destination> {
       drawer: CustomDrawer(),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _searchField(),
-            SizedBox(height: 40),
-            if (selectedFilter == FilterType.all || selectedFilter == FilterType.categories)
-              _categoriesSection(),  // Display filtered categories
-            if (selectedFilter == FilterType.all || selectedFilter == FilterType.popularDestinations)
-              Padding(
-                padding: const EdgeInsets.only(top: 40),  // Add spacing
-                child: _travelSection(),  // Display filtered travel categories
-              ),
-            if (selectedFilter == FilterType.all || selectedFilter == FilterType.activities)
-              Padding(
-                padding: const EdgeInsets.only(top: 40),  // Add spacing
-                child: _activitiesSection(),  // Display filtered activities
-              ),
-            SizedBox(height: 40),
+            SizedBox(height: 20),
+            _featuredDestinationsSection(),
+            SizedBox(height: 20),
+            _popularDestinationsSection(),
+            SizedBox(height: 20),
+            _discoverNearYouSection(),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
+        currentIndex: 0,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.explore),
+            label: 'Explore',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border),
+            label: 'Wishlist',
+          ),
+        ],
       ),
     );
   }
 
-  // Categories section with filtered categories
-  Column _categoriesSection() {
-    var filteredCategories = getFilteredCategories();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: Text(
-            'Category',
-            style: TextStyle(
-              color: Color(0xff1D1617),
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-        SizedBox(height: 15),
-        SizedBox(
-          height: 120,
-          child: ListView.separated(
-              itemCount: filteredCategories.length,
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.only(left: 20, right: 20),
-              separatorBuilder: (context, index) => SizedBox(width: 25),
-              itemBuilder: (context, index) {
-                return Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: filteredCategories[index].boxColor.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: SvgPicture.asset(filteredCategories[index].iconPath),
-                      ),
-                      Text(
-                        filteredCategories[index].name,
-                        style: TextStyle(
-                          color: Color(0xff828796),
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }),
-        ),
-      ],
-    );
-  }
-
-  // Travel section with filtered travel categories
-  Column _travelSection() {
-    var filteredTravelCategories = getFilteredTravelCategories();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: Text(
-            'Popular Destination',
-            style: TextStyle(
-              color: Color(0xff1D1617),
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-        SizedBox(height: 15),
-        SizedBox(
-          height: 240,
-          child: ListView.separated(
-            itemBuilder: (context, index) {
-              return Container(
-                width: 210,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(
-                  color: filteredTravelCategories[index].boxColor.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      filteredTravelCategories[index].iconPath,
-                      height: 80,
-                      width: 80,
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      filteredTravelCategories[index].name,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
-                        fontSize: 16,
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      filteredTravelCategories[index].destination,
-                      style: TextStyle(
-                        color: Color(0xff828796),
-                        fontSize: 12,
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10),
-                      height: 40,
-                      width: 130,
-                      child: InkWell(
-                        onTap: () {
-                          if (travelCategories[index].name == 'London Bridge') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LondonDestinations(),
-                              ),
-                            );
-                          } else if (travelCategories[index].name ==
-                              'Japanese Shrine') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => JapanDestinations(),
-                              ),
-                            );
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                filteredTravelCategories[index].viewIsSelected
-                                    ? Color(0xff64B6FF)
-                                    : Colors.transparent,
-                                filteredTravelCategories[index].viewIsSelected
-                                    ? Color(0xff64B6FF)
-                                    : Colors.transparent,
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'View',
-                              style: TextStyle(
-                                color: filteredTravelCategories[index].viewIsSelected
-                                    ? Colors.white
-                                    : Colors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-            itemCount: filteredTravelCategories.length,
-            separatorBuilder: (context, index) => SizedBox(width: 25),
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Activities section with filtered activities
-  Column _activitiesSection() {
-    var filteredActivities = getFilteredActivities();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 4.0, left: 20, right: 20),
-          child: Text(
-            'Activities',
-            style: TextStyle(
-              color: Color(0xff1D1617),
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-        SizedBox(height: 15),
-        ListView.separated(
-          shrinkWrap: true, // Set shrinkWrap to true
-          physics: NeverScrollableScrollPhysics(), // Disable inner scrolling
-          itemBuilder: (context, index) {
-            return Container(
-              height: 115,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xff1D1617).withOpacity(0.07),
-                      spreadRadius: 0.0,
-                      blurRadius: 40,
-                      offset: const Offset(0, 10),
-                    )
-                  ]),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20, left: 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SvgPicture.asset(
-                      filteredActivities[index].iconPath,
-                      height: 80,
-                      width: 80,
-                    ),
-                    SizedBox(width: 15),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            filteredActivities[index].name,
-                            style: TextStyle(
-                              color: Color(0xff1D1617),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            filteredActivities[index].description,
-                            style: TextStyle(
-                              color: Color(0xff828796),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-          separatorBuilder: (context, index) => SizedBox(height: 20),
-          itemCount: filteredActivities.length,
-        ),
-      ],
-    );
-  }
-
-  // Search field with onChanged to update the search query
+  // Search field widget
   Container _searchField() {
     return Container(
       height: 50,
-      margin: EdgeInsets.only(top: 40, left: 20, right: 20),
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-          color: Color(0xff1D1617).withOpacity(0.3),
-          spreadRadius: 0.0,
-          blurRadius: 40,
-          offset: const Offset(0, 3),
-        )
-      ]),
+      margin: EdgeInsets.only(top: 16, left: 20, right: 20),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xff1D1617).withOpacity(0.1),
+            spreadRadius: 0.0,
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          )
+        ],
+      ),
       child: TextField(
         onChanged: (value) {
           setState(() {
@@ -398,61 +341,15 @@ class _DestinationState extends State<Destination> {
         },
         decoration: InputDecoration(
           filled: true,
-          fillColor: const Color(0xffF7F8F8),
+          fillColor: Colors.white,
           hintText: 'Search',
           hintStyle: TextStyle(
             color: Color(0xff828796),
             fontSize: 15,
           ),
-          contentPadding: EdgeInsets.all(15),
-          prefixIcon: Padding(
-            padding: const EdgeInsets.all(12),
-            child: SvgPicture.asset("assets/icons/search.svg"),
-          ),
-          suffixIcon: SizedBox(
-            width: 100,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                VerticalDivider(
-                  color: Color(0xffddddada),
-                  thickness: 1,
-                  indent: 10,
-                  endIndent: 10,
-                ),
-                PopupMenuButton<String>(
-                  icon: SvgPicture.asset("assets/icons/settings.svg"),
-                  onSelected: (value) {
-                    setState(() {
-                      if (value == 'A-Z' || value == 'Z-A') {
-                        isAscending = value == 'A-Z';
-                        sortCategories();
-                        sortTravelCategories();
-                        sortActivities();
-                      } else if (value == 'All') {
-                        selectedFilter = FilterType.all;
-                      } else if (value == 'Categories') {
-                        selectedFilter = FilterType.categories;
-                      } else if (value == 'Popular Destinations') {
-                        selectedFilter = FilterType.popularDestinations;
-                      } else if (value == 'Activities') {
-                        selectedFilter = FilterType.activities;
-                      }
-                    });
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return {'A-Z', 'Z-A', 'All', 'Categories', 'Popular Destinations', 'Activities'}
-                        .map((String choice) {
-                      return PopupMenuItem<String>(
-                        value: choice,
-                        child: Text(choice),
-                      );
-                    }).toList();
-                  },
-                ),
-              ],
-            ),
-          ),
+          contentPadding: EdgeInsets.all(8),
+          prefixIcon: Icon(Icons.search, color: Colors.grey),
+          suffixIcon: Icon(Icons.filter_list, color: Colors.grey),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide.none,
@@ -461,5 +358,544 @@ class _DestinationState extends State<Destination> {
       ),
     );
   }
-}
 
+// Featured Destinations section
+  Widget _featuredDestinationsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            'Featured Destinations',
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 220,
+          child: Stack(
+            children: [
+              PageView.builder(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentFeaturedIndex = index;
+                  });
+                },
+                itemCount: featuredDestinations.length,
+                itemBuilder: (context, index) {
+                  return AnimatedBuilder(
+                    animation: _pageController,
+                    builder: (context, child) {
+                      double value = 1.0;
+                      if (_pageController.position.haveDimensions) {
+                        value = _pageController.page! - index;
+                        value = (1 - (value.abs() * 0.3)).clamp(0.0, 1.0);
+                      }
+                      return Center(
+                        child: SizedBox(
+                          height: Curves.easeOut.transform(value) * 180,
+                          width: Curves.easeOut.transform(value) * 320,
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        image: DecorationImage(
+                          image: AssetImage(featuredDestinations[index]['image']),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.black.withOpacity(0.7),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 10,
+                            right: 10,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.8),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                featuredDestinations[index]['days'],
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 16,
+                            right: 16,
+                            bottom: 16,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  featuredDestinations[index]['name'],
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  featuredDestinations[index]['description'],
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.9),
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.star, color: Colors.amber, size: 18),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      featuredDestinations[index]['rating'].toString(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+              // Left Arrow
+              Positioned(
+                left: 10,
+                top: 0,
+                bottom: 0,
+                child: Center(
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                    onPressed: () {
+                      if (_currentFeaturedIndex > 0) {
+                        _pageController.previousPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ),
+              // Right Arrow
+              Positioned(
+                right: 10,
+                top: 0,
+                bottom: 0,
+                child: Center(
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_forward_ios, color: Colors.white),
+                    onPressed: () {
+                      if (_currentFeaturedIndex < featuredDestinations.length - 1) {
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(
+            featuredDestinations.length,
+                (index) => Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _currentFeaturedIndex == index
+                    ? Colors.blue
+                    : Colors.grey.withOpacity(0.3),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Popular Destinations
+  Widget _popularDestinationsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Popular Destinations',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              // Updated View All button with navigation
+              GestureDetector(
+                onTap: () {
+                  // Navigate to All Popular Destinations with a hero animation
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          AllPopularDestinations(
+                            popularDestinations: popularDestinations,
+                          ),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        var begin = const Offset(1.0, 0.0);
+                        var end = Offset.zero;
+                        var curve = Curves.easeInOut;
+                        var tween = Tween(begin: begin, end: end).chain(
+                          CurveTween(curve: curve),
+                        );
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                      transitionDuration: const Duration(milliseconds: 300),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        'View all',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.blue,
+                        size: 12,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 12),
+        Container(
+          height: 200,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            // Show only first 2 destinations in main screen
+            itemCount: popularDestinations.length > 2 ? 2 : popularDestinations.length,
+            itemBuilder: (context, index) {
+              return Hero(
+                tag: 'popular_destination_$index',
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: Container(
+                    width: 160,
+                    margin: EdgeInsets.only(right: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15),
+                              ),
+                              image: DecorationImage(
+                                image: AssetImage(
+                                    popularDestinations[index]['image']),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            child: Stack(
+                              children: [
+                                // Add a gradient overlay for text readability
+                                Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  child: Container(
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.zero,
+                                        bottomRight: Radius.zero,
+                                      ),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Colors.transparent,
+                                          Colors.black.withOpacity(0.3),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15),
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                popularDestinations[index]['name'],
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              SizedBox(height: 2),
+                              Row(
+                                children: [
+                                  Icon(Icons.location_on, color: Colors.grey, size: 14),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    popularDestinations[index]['country'],
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 4),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    popularDestinations[index]['price'],
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.star, color: Colors.amber, size: 16),
+                                      SizedBox(width: 2),
+                                      Text(
+                                        popularDestinations[index]['rating'].toString(),
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+
+  // Discover Near You section
+  Widget _discoverNearYouSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Discover Near You',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  '2.5 km radius',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 12),
+        Container(
+          height: 150,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            itemCount: nearbyAttractions.length,
+            itemBuilder: (context, index) {
+              return Container(
+                width: 150,
+                margin: EdgeInsets.only(right: 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.asset(
+                          nearbyAttractions[index]['image'],
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    if (nearbyAttractions[index].containsKey('distance'))
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.9),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            nearbyAttractions[index]['distance'],
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    Positioned(
+                      left: 10,
+                      bottom: 10,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            nearbyAttractions[index]['name'],
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Icon(Icons.star, color: Colors.amber, size: 16),
+                              SizedBox(width: 4),
+                              Text(
+                                nearbyAttractions[index]['rating'].toString(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        SizedBox(height: 20),
+      ],
+    );
+  }
+}
