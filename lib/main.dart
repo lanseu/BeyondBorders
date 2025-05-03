@@ -3,6 +3,7 @@ import 'package:beyond_borders/pages/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:beyond_borders/components/custom_drawer.dart';
 import 'package:beyond_borders/services/auth_wrapper.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:lottie/lottie.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:beyond_borders/authentication/login.dart';
@@ -14,6 +15,7 @@ import 'package:beyond_borders/pages/profile.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await dotenv.load();
   runApp(const MyApp());
 }
 
