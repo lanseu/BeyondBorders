@@ -123,8 +123,8 @@ class _ProfileState extends State<Profile> {
           (today.month < dateOfBirth.month ||
               (today.month == dateOfBirth.month && today.day < dateOfBirth.day) ? 1 : 0);
 
-      if (age < 7) {
-        return 'You must be at least 7 years old';
+      if (age < 12) {
+        return 'You must be at least 12 years old';
       }
     } catch (e) {
       return 'Invalid date format';
@@ -144,11 +144,14 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
+    // Set maximum date as current date minus 12 years
+    final DateTime maxDate = DateTime.now().subtract(const Duration(days: 365 * 12));
+
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: _dobController.text.isNotEmpty
           ? DateTime.parse(_dobController.text)
-          : DateTime.now().subtract(const Duration(days: 365 * 7)), // Default to 7 years ago
+          : maxDate, // Default to 12 years ago
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
@@ -493,7 +496,7 @@ class _ProfileState extends State<Profile> {
                     errorStyle: const TextStyle(
                         color: Colors.redAccent,
                         fontWeight: FontWeight.bold),
-                    helperText: 'You must be at least 7 years old',
+                    helperText: 'You must be at least 12 years old',
                     helperStyle: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 12,

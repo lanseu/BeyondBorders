@@ -74,9 +74,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
+    // Set maximum date as current date minus 12 years
+    final DateTime maxDate = DateTime.now().subtract(const Duration(days: 365 * 12));
+
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: maxDate,
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
@@ -86,6 +89,31 @@ class _RegistrationFormState extends State<RegistrationForm> {
         "${pickedDate.toLocal()}".split(' ')[0];
       });
     }
+  }
+
+  String? _validateDateOfBirth(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select date of birth';
+    }
+
+    try {
+      final DateTime dob = DateTime.parse(value);
+      final DateTime today = DateTime.now();
+
+      // Calculate age
+      int age = today.year - dob.year;
+      if (today.month < dob.month || (today.month == dob.month && today.day < dob.day)) {
+        age--;
+      }
+
+      if (age < 12) {
+        return 'You must be at least 12 years old to register';
+      }
+    } catch (e) {
+      return 'Invalid date format';
+    }
+
+    return null;
   }
 
   String? _validatePassword(String? value) {
@@ -247,7 +275,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Date of Birth',
+                    labelText: 'Date of Birth (Must be 12+ years old)',
                     labelStyle: const TextStyle(
                         color: Colors.grey, fontWeight: FontWeight.w600),
                     border: const OutlineInputBorder(
@@ -258,11 +286,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     errorStyle: const TextStyle(
                         color: Colors.redAccent, fontWeight: FontWeight.bold),
                   ),
-                  validator: (value) => value == null || value.isEmpty
-                      ? 'Please select date of birth'
-                      : null,
-                  onTap: () =>
-                      _selectDate(context),
+                  validator: _validateDateOfBirth,
+                  onTap: () => _selectDate(context),
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
