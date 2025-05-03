@@ -32,6 +32,7 @@ class _DestinationState extends State<Destination> {
   final PageController _pageController = PageController(viewportFraction: 0.85);
   int _currentFeaturedIndex = 0;
   Timer? _carouselTimer;
+  final Set<String> _selectedFilters = {}; // Track selected filters
 
   void _startAutoScroll() {
     _carouselTimer = Timer.periodic(Duration(seconds: 3), (timer) {
@@ -49,6 +50,216 @@ class _DestinationState extends State<Destination> {
     });
   }
 
+  void _showFilterModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      isScrollControlled: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return SafeArea(
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Filters',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                'Refine your search',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 24),
+                      Text(
+                        'Activities',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          _filterChip('Hiking', setState),
+                          _filterChip('Photography', setState),
+                          _filterChip('Culture', setState),
+                          _filterChip('Food', setState),
+                          _filterChip('Beach', setState),
+                          _filterChip('Adventure', setState),
+                          _filterChip('Relaxation', setState),
+                          _filterChip('History', setState),
+                        ],
+                      ),
+                      SizedBox(height: 24),
+                      Text(
+                        'Best Season',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          _filterChip('Spring', setState),
+                          _filterChip('Summer', setState),
+                          _filterChip('Fall', setState),
+                          _filterChip('Winter', setState),
+                        ],
+                      ),
+                      SizedBox(height: 24),
+                      Text(
+                        'Minimum Rating',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          _filterChip('4+', setState),
+                          _filterChip('4.5+', setState),
+                          _filterChip('4.8+', setState),
+                        ],
+                      ),
+                      SizedBox(height: 24),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.blue,
+                                side: BorderSide(color: Colors.transparent),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _selectedFilters.clear();
+                                });
+                              },
+                              child: Text(
+                                'Clear All',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue.shade700,
+                                foregroundColor: Colors.white,
+                                side: BorderSide(color: Colors.transparent),
+                              ),
+                              onPressed: () {
+                                // Apply filters logic
+                              },
+                              child: Text(
+                                'Apply Filters',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _filterChip(String label, void Function(void Function()) setState) {
+    final Map<String, Map<String, Color>> colorMapping = {
+      'Hiking': {'border': Colors.green.shade100, 'text': Colors.green.shade800},
+      'Photography': {'border': Colors.pink.shade100, 'text': Colors.pink.shade800},
+      'Culture': {'border': Colors.purple.shade100, 'text': Colors.purple.shade800},
+      'Food': {'border': Colors.red.shade100, 'text': Colors.red.shade800},
+      'Beach': {'border': Colors.yellow.shade100, 'text': Colors.yellow.shade800},
+      'Adventure': {'border': Colors.orange.shade100, 'text': Colors.orange.shade800},
+      'Relaxation': {'border': Colors.teal.shade100, 'text': Colors.teal.shade800},
+      'History': {'border': Colors.brown.shade300, 'text': Colors.brown.shade800},
+      'Spring': {'border': Colors.green.shade200, 'text': Colors.green.shade900},
+      'Summer': {'border': Colors.yellow.shade200, 'text': Colors.yellow.shade900},
+      'Fall': {'border': Colors.orange.shade200, 'text': Colors.orange.shade900},
+      'Winter': {'border': Colors.blue.shade200, 'text': Colors.blue.shade900},
+      '4+': {'border': Colors.blue.shade100, 'text': Colors.blue.shade800},
+      '4.5+': {'border': Colors.blue.shade100, 'text': Colors.blue.shade800},
+      '4.8+': {'border': Colors.blue.shade100, 'text': Colors.blue.shade800},
+    };
+
+    final colors = colorMapping[label] ?? {'border': Color(0xFFD6D6D6), 'text': Color(0xFF6E6E6E)};
+    final isSelected = _selectedFilters.contains(label);
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          if (isSelected) {
+            _selectedFilters.remove(label);
+          } else {
+            _selectedFilters.add(label);
+          }
+        });
+      },
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+        decoration: BoxDecoration(
+          color: isSelected ? colors['border'] : Color(0xFFD6D6D6),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Text(
+          label,
+          style: TextStyle(color: isSelected ? colors['text'] : Color(0xFF6E6E6E)),
+        ),
+      ),
+    );
+  }
+  
   final List<Map<String, dynamic>> featuredDestinations = [
     {
       'image': 'assets/images/paris.jpg',
@@ -212,8 +423,9 @@ class _DestinationState extends State<Destination> {
 
   List<CategoryModel> getFilteredCategories() {
     return categories
-        .where((category) =>
-            category.name.toLowerCase().contains(searchQuery.toLowerCase()))
+        .where((category) => category.name
+            .toLowerCase()
+            .contains(searchQuery.toLowerCase()))
         .toList();
   }
 
@@ -227,8 +439,9 @@ class _DestinationState extends State<Destination> {
 
   List<ActivityModel> getFilteredActivities() {
     return activities
-        .where((activity) =>
-            activity.name.toLowerCase().contains(searchQuery.toLowerCase()))
+        .where((activity) => activity.name
+            .toLowerCase()
+            .contains(searchQuery.toLowerCase()))
         .toList();
   }
 
@@ -338,7 +551,10 @@ class _DestinationState extends State<Destination> {
           ),
           contentPadding: EdgeInsets.all(8),
           prefixIcon: Icon(Icons.search, color: Colors.grey),
-          suffixIcon: Icon(Icons.filter_list, color: Colors.grey),
+          suffixIcon: GestureDetector(
+            onTap: () => _showFilterModal(context),
+            child: Icon(Icons.filter_list, color: Colors.grey),
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide.none,
@@ -348,7 +564,7 @@ class _DestinationState extends State<Destination> {
     );
   }
 
-// Featured Destinations section
+  // Featured Destinations section
   Widget _featuredDestinationsSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
