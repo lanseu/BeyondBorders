@@ -3,9 +3,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../services/places_service.dart';
 
 class OverviewPanel extends StatefulWidget {
-  final String country;
+  final String name;
 
-  const OverviewPanel({super.key, required this.country});
+  const OverviewPanel({super.key, required this.name});
 
   @override
   _OverviewPanelState createState() => _OverviewPanelState();
@@ -20,7 +20,7 @@ class _OverviewPanelState extends State<OverviewPanel> {
     super.initState();
     final apiKey = dotenv.env['GOOGLE_PLACES_API_KEY'] ?? '';
     _placesService = PlacesService(apiKey);
-    _placesFuture = _placesService.searchAttractions(widget.country);
+    _placesFuture = _placesService.searchAttractions(widget.name);
   }
 
   @override
@@ -60,7 +60,7 @@ class _OverviewPanelState extends State<OverviewPanel> {
                 );
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return Center(
-                  child: Text('No attractions found for ${widget.country}'),
+                  child: Text('No attractions found for ${widget.name}'),
                 );
               } else {
                 return Column(
