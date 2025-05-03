@@ -825,7 +825,7 @@ class _CommunityPageState extends State<CommunityPage> {
         IconButton(
           icon: Icon(Icons.notifications_outlined, color: _darkGrayColor),
           onPressed: () {
-            // Add notification functionality here
+            Navigator.pushNamed(context, '/notifications');
           },
         ),
       ],
