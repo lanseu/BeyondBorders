@@ -6,6 +6,7 @@ import 'package:beyond_borders/pages/destinations.dart';
 import 'package:beyond_borders/authentication/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:beyond_borders/pages/settings.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -298,7 +299,7 @@ class DrwListView extends StatelessWidget {
           title: "Settings",
           iconPath: 'assets/icons/destination_icon.svg',
           onTap: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const Destination())),
+              context, MaterialPageRoute(builder: (context) => const SettingsPage())),
         ),
         const SizedBox(height: 10),
         HoverListTile(

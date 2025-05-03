@@ -339,7 +339,6 @@ class _CommunityPageState extends State<CommunityPage> {
         _isPostingLoading = false;
       });
 
-      Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -351,6 +350,7 @@ class _CommunityPageState extends State<CommunityPage> {
           ),
         ),
       );
+      return;
     } catch (e) {
       setState(() {
         _isPostingLoading = false;
@@ -358,6 +358,7 @@ class _CommunityPageState extends State<CommunityPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to create post: $e')),
       );
+      rethrow;
     }
   }
 
