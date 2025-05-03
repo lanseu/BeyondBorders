@@ -32,7 +32,6 @@ class _DestinationState extends State<Destination> {
   int _currentFeaturedIndex = 0;
   Timer? _carouselTimer;
 
-
   void _startAutoScroll() {
     _carouselTimer = Timer.periodic(Duration(seconds: 3), (timer) {
       if (_pageController.hasClients) {
@@ -49,7 +48,171 @@ class _DestinationState extends State<Destination> {
     });
   }
 
+  void _showFilterModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      isScrollControlled: true, // Allow modal to adjust to content
+      builder: (context) {
+        return SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min, // Adjust height to content
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Filters',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            'Refine your search',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Activities',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      _filterChip('Hiking'),
+                      _filterChip('Photography'),
+                      _filterChip('Culture'),
+                      _filterChip('Food'),
+                      _filterChip('Beach'),
+                      _filterChip('Adventure'),
+                      _filterChip('Relaxation'),
+                      _filterChip('History'),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Best Season',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      _filterChip('Spring'),
+                      _filterChip('Summer'),
+                      _filterChip('Fall'),
+                      _filterChip('Winter'),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Minimum Rating',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      _filterChip('4+'),
+                      _filterChip('4.5+'),
+                      _filterChip('4.8+'),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    color: Colors.blue.withOpacity(0.1),
+                    padding: EdgeInsets.all(12),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.blue,
+                              side: BorderSide(color: Colors.transparent),
+                            ),
+                            onPressed: () {
+                              // Clear filters logic
+                            },
+                            child: Text(
+                              'Clear All',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue.shade700,
+                              foregroundColor: Colors.white,
+                            ),
+                            onPressed: () {
+                              // Apply filters logic
+                            },
+                            child: Text(
+                              'Apply Filters',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
+  Widget _filterChip(String label) {
+    return Chip(
+      label: Text(label),
+      backgroundColor: Colors.grey.withOpacity(0.2), // Remove blue border
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+    );
+  }
 
   final List<Map<String, dynamic>> featuredDestinations = [
     {
@@ -122,8 +285,6 @@ class _DestinationState extends State<Destination> {
       'days': '5-6 days',
       'rating': 4.7,
     }
-
-
   ];
 
   final List<Map<String, dynamic>> popularDestinations = [
@@ -197,7 +358,6 @@ class _DestinationState extends State<Destination> {
       'price': '\$170',
       'rating': 4.5,
     },
-
   ];
 
   final List<Map<String, dynamic>> nearbyAttractions = [
@@ -218,43 +378,40 @@ class _DestinationState extends State<Destination> {
   List<CategoryModel> getFilteredCategories() {
     return categories
         .where((category) => category.name
-        .toLowerCase()
-        .contains(searchQuery.toLowerCase()))
+            .toLowerCase()
+            .contains(searchQuery.toLowerCase()))
         .toList();
   }
 
   List<TravelCategory> getFilteredTravelCategories() {
     return travelCategories
         .where((travelCategory) => travelCategory.name
-        .toLowerCase()
-        .contains(searchQuery.toLowerCase()))
+            .toLowerCase()
+            .contains(searchQuery.toLowerCase()))
         .toList();
   }
 
   List<ActivityModel> getFilteredActivities() {
     return activities
         .where((activity) => activity.name
-        .toLowerCase()
-        .contains(searchQuery.toLowerCase()))
+            .toLowerCase()
+            .contains(searchQuery.toLowerCase()))
         .toList();
   }
 
   void sortCategories() {
-    categories.sort((a, b) => isAscending
-        ? a.name.compareTo(b.name)
-        : b.name.compareTo(a.name));
+    categories.sort((a, b) =>
+        isAscending ? a.name.compareTo(b.name) : b.name.compareTo(a.name));
   }
 
   void sortTravelCategories() {
-    travelCategories.sort((a, b) => isAscending
-        ? a.name.compareTo(b.name)
-        : b.name.compareTo(a.name));
+    travelCategories.sort((a, b) =>
+        isAscending ? a.name.compareTo(b.name) : b.name.compareTo(a.name));
   }
 
   void sortActivities() {
-    activities.sort((a, b) => isAscending
-        ? a.name.compareTo(b.name)
-        : b.name.compareTo(a.name));
+    activities.sort((a, b) =>
+        isAscending ? a.name.compareTo(b.name) : b.name.compareTo(a.name));
   }
 
   void _getCategoryInfo() {
@@ -279,7 +436,6 @@ class _DestinationState extends State<Destination> {
     _carouselTimer?.cancel();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -349,7 +505,10 @@ class _DestinationState extends State<Destination> {
           ),
           contentPadding: EdgeInsets.all(8),
           prefixIcon: Icon(Icons.search, color: Colors.grey),
-          suffixIcon: Icon(Icons.filter_list, color: Colors.grey),
+          suffixIcon: GestureDetector(
+            onTap: () => _showFilterModal(context),
+            child: Icon(Icons.filter_list, color: Colors.grey),
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide.none,
@@ -359,7 +518,7 @@ class _DestinationState extends State<Destination> {
     );
   }
 
-// Featured Destinations section
+  // Featured Destinations section
   Widget _featuredDestinationsSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -539,7 +698,7 @@ class _DestinationState extends State<Destination> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
             featuredDestinations.length,
-                (index) => Container(
+            (index) => Container(
               margin: const EdgeInsets.symmetric(horizontal: 4),
               width: 8,
               height: 8,
@@ -583,8 +742,8 @@ class _DestinationState extends State<Destination> {
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) =>
                           AllPopularDestinations(
-                            popularDestinations: popularDestinations,
-                          ),
+                        popularDestinations: popularDestinations,
+                      ),
                       transitionsBuilder: (context, animation, secondaryAnimation, child) {
                         var begin = const Offset(1.0, 0.0);
                         var end = Offset.zero;
@@ -775,7 +934,6 @@ class _DestinationState extends State<Destination> {
       ],
     );
   }
-
 
   // Discover Near You section
   Widget _discoverNearYouSection() {
