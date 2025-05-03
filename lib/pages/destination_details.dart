@@ -67,11 +67,11 @@ class _DestinationDetailsState extends State<DestinationDetails> {
                 ),
               ),
               SizedBox(
-                height: 500,
+                height: 650,
                 child: TabBarView(children: [
-                  OverviewPanel(country: widget.country),
-                  ReviewPanel(),
-                  PhotosPanel(),
+                  OverviewPanel(name: widget.name),
+                  ReviewPanel(name: widget.name),
+                  PhotosPanel(name: widget.name),
                 ]),
               ),
               _buildBookNowButton()
