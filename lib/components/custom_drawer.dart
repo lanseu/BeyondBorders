@@ -1,11 +1,9 @@
-import 'package:beyond_borders/pages/london_destinations.dart';
 import 'package:beyond_borders/pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:beyond_borders/pages/about.dart';
 import 'package:beyond_borders/pages/destinations.dart';
 import 'package:beyond_borders/authentication/main_page.dart';
-import 'package:beyond_borders/authentication/registration.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
