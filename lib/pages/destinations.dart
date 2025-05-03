@@ -11,6 +11,7 @@ import 'package:beyond_borders/pages/london_destinations.dart';
 import 'package:beyond_borders/pages/japan_destinations.dart';
 
 import 'all_popular_destinations.dart';
+import 'destination_details.dart';
 
 enum FilterType { all, categories, popularDestinations, activities }
 
@@ -258,7 +259,7 @@ class _DestinationState extends State<Destination> {
       ),
     );
   }
-
+  
   final List<Map<String, dynamic>> featuredDestinations = [
     {
       'image': 'assets/images/paris.jpg',
@@ -614,7 +615,8 @@ class _DestinationState extends State<Destination> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
                         image: DecorationImage(
-                          image: AssetImage(featuredDestinations[index]['image']),
+                          image:
+                              AssetImage(featuredDestinations[index]['image']),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -637,7 +639,8 @@ class _DestinationState extends State<Destination> {
                             top: 10,
                             right: 10,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
                               decoration: BoxDecoration(
                                 color: Colors.white.withOpacity(0.8),
                                 borderRadius: BorderRadius.circular(20),
@@ -677,10 +680,12 @@ class _DestinationState extends State<Destination> {
                                 const SizedBox(height: 4),
                                 Row(
                                   children: [
-                                    const Icon(Icons.star, color: Colors.amber, size: 18),
+                                    const Icon(Icons.star,
+                                        color: Colors.amber, size: 18),
                                     const SizedBox(width: 4),
                                     Text(
-                                      featuredDestinations[index]['rating'].toString(),
+                                      featuredDestinations[index]['rating']
+                                          .toString(),
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -723,9 +728,11 @@ class _DestinationState extends State<Destination> {
                 bottom: 0,
                 child: Center(
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_forward_ios, color: Colors.white),
+                    icon: const Icon(Icons.arrow_forward_ios,
+                        color: Colors.white),
                     onPressed: () {
-                      if (_currentFeaturedIndex < featuredDestinations.length - 1) {
+                      if (_currentFeaturedIndex <
+                          featuredDestinations.length - 1) {
                         _pageController.nextPage(
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
@@ -789,7 +796,8 @@ class _DestinationState extends State<Destination> {
                           AllPopularDestinations(
                         popularDestinations: popularDestinations,
                       ),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
                         var begin = const Offset(1.0, 0.0);
                         var end = Offset.zero;
                         var curve = Curves.easeInOut;
@@ -840,135 +848,155 @@ class _DestinationState extends State<Destination> {
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.symmetric(horizontal: 20),
             // Show only first 2 destinations in main screen
-            itemCount: popularDestinations.length > 2 ? 2 : popularDestinations.length,
+            itemCount:
+                popularDestinations.length > 2 ? 2 : popularDestinations.length,
             itemBuilder: (context, index) {
-              return Hero(
-                tag: 'popular_destination_$index',
-                child: Material(
-                  type: MaterialType.transparency,
-                  child: Container(
-                    width: 160,
-                    margin: EdgeInsets.only(right: 16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 1,
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DestinationDetails(
+                        name: popularDestinations[index]['name'],
+                        country: popularDestinations[index]['country'],
+                        rating: popularDestinations[index]['rating'],
+                        image: popularDestinations[index]['image'],
+                      ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15),
+                  );
+                },
+                child: Hero(
+                  tag: 'popular_destination_$index',
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: Container(
+                      width: 160,
+                      margin: EdgeInsets.only(right: 16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15),
+                                ),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      popularDestinations[index]['image']),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    popularDestinations[index]['image']),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            child: Stack(
-                              children: [
-                                // Add a gradient overlay for text readability
-                                Positioned(
-                                  bottom: 0,
-                                  left: 0,
-                                  right: 0,
-                                  child: Container(
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.zero,
-                                        bottomRight: Radius.zero,
-                                      ),
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: [
-                                          Colors.transparent,
-                                          Colors.black.withOpacity(0.3),
-                                        ],
+                              child: Stack(
+                                children: [
+                                  // Add a gradient overlay for text readability
+                                  Positioned(
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: Container(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.zero,
+                                          bottomRight: Radius.zero,
+                                        ),
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.transparent,
+                                            Colors.black.withOpacity(0.3),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(15),
+                                bottomRight: Radius.circular(15),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  popularDestinations[index]['name'],
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                SizedBox(height: 2),
+                                Row(
+                                  children: [
+                                    Icon(Icons.location_on,
+                                        color: Colors.grey, size: 14),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      popularDestinations[index]['country'],
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 4),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      popularDestinations[index]['price'],
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.star,
+                                            color: Colors.amber, size: 16),
+                                        SizedBox(width: 2),
+                                        Text(
+                                          popularDestinations[index]['rating']
+                                              .toString(),
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(15),
-                              bottomRight: Radius.circular(15),
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                popularDestinations[index]['name'],
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              SizedBox(height: 2),
-                              Row(
-                                children: [
-                                  Icon(Icons.location_on, color: Colors.grey, size: 14),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    popularDestinations[index]['country'],
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 4),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    popularDestinations[index]['price'],
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.star, color: Colors.amber, size: 16),
-                                      SizedBox(width: 2),
-                                      Text(
-                                        popularDestinations[index]['rating'].toString(),
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -1045,7 +1073,8 @@ class _DestinationState extends State<Destination> {
                         top: 8,
                         right: 8,
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.9),
                             borderRadius: BorderRadius.circular(20),
