@@ -13,6 +13,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as img;
+import '../services/notification_service.dart';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({Key? key}) : super(key: key);
@@ -351,6 +352,15 @@ class _CommunityPageState extends State<CommunityPage> {
       } else {
         await likedByRef.set(true);
         await likesRef.set(ServerValue.increment(1));
+
+        NotificationService notificationService = NotificationService();
+
+        await notificationService.createLikeNotification(
+          postId: post.id,
+          postOwnerId: post.userId,
+          postText: post.text,
+          postImageUrl: post.imageUrl,
+        );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
