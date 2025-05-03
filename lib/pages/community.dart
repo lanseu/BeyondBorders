@@ -51,6 +51,9 @@ class _CommunityPageState extends State<CommunityPage> {
   final Color _darkGrayColor = const Color(0xFF657786);
   final Color _textColor = const Color(0xFF14171A);
 
+  bool _hasUnreadNotifications = false;
+  late DatabaseReference _notificationsRef;
+
   @override
   void initState() {
     super.initState();
@@ -58,6 +61,7 @@ class _CommunityPageState extends State<CommunityPage> {
         'https://beyond-borders-457415-default-rtdb.asia-southeast1.firebasedatabase.app/';
     _postsRef = _database.ref().child('posts');
     _usersRef = _database.ref().child('users');
+    _notificationsRef = _database.ref().child('notifications');
     _fetchCurrentUserData();
     _fetchPosts();
   }
@@ -80,6 +84,34 @@ class _CommunityPageState extends State<CommunityPage> {
           });
         }
       }
+    }
+  }
+
+  // Check for unread notifications
+  Future<void> _checkUnreadNotifications() async {
+    User? currentUser = _auth.currentUser;
+    if (currentUser != null) {
+      _notificationsRef
+          .orderByChild('receiverId')
+          .equalTo(currentUser.uid)
+          .onValue
+          .listen((event) {
+        bool hasUnread = false;
+        if (event.snapshot.value != null) {
+          Map<dynamic, dynamic>? notifications = event.snapshot.value as Map?;
+          if (notifications != null) {
+            notifications.forEach((key, value) {
+              if (value['read'] == false) {
+                hasUnread = true;
+              }
+            });
+          }
+        }
+
+        setState(() {
+          _hasUnreadNotifications = hasUnread;
+        });
+      });
     }
   }
 
@@ -361,6 +393,8 @@ class _CommunityPageState extends State<CommunityPage> {
           postText: post.text,
           postImageUrl: post.imageUrl,
         );
+
+        _checkUnreadNotifications();
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -832,11 +866,35 @@ class _CommunityPageState extends State<CommunityPage> {
       ),
       iconTheme: IconThemeData(color: _darkGrayColor),
       actions: [
-        IconButton(
-          icon: Icon(Icons.notifications_outlined, color: _darkGrayColor),
-          onPressed: () {
-            Navigator.pushNamed(context, '/notifications');
-          },
+        Stack(
+          children: [
+            IconButton(
+              icon: Icon(Icons.notifications_outlined, color: _darkGrayColor),
+              onPressed: () {
+                Navigator.pushNamed(context, '/notifications');
+              },
+            ),
+            if (_hasUnreadNotifications)
+              Positioned(
+                right: 8,
+                top: 8,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Text(
+                    '!',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
       ],
     );
