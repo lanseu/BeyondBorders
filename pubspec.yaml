@@ -31,6 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  http: ^1.3.0
+  flutter_dotenv: ^5.0.2
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.0.9
   lottie: ^3.3.1
@@ -66,6 +68,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - .env
     - assets/icons/arrow_left.svg
     - assets/icons/dots.svg
     - assets/icons/search.svg
