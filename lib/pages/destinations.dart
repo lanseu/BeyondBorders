@@ -1,14 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:beyond_borders/models/activities.dart';
 import 'package:beyond_borders/models/category_model.dart';
 import 'package:beyond_borders/models/travel_model.dart';
 import 'package:beyond_borders/components/custom_drawer.dart';
 import 'package:beyond_borders/components/custom_appbar.dart';
-import 'package:beyond_borders/pages/london_destinations.dart';
-import 'package:beyond_borders/pages/japan_destinations.dart';
 
 import 'all_popular_destinations.dart';
 import 'destination_details.dart';
