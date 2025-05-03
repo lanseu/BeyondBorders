@@ -12,8 +12,8 @@ class NotificationService {
   NotificationService() {
     _database.databaseURL =
     'https://beyond-borders-457415-default-rtdb.asia-southeast1.firebasedatabase.app/';
-    _notificationsRef = _database.ref().child('notifications');
-    _postsRef = _database.ref().child('posts');
+    _notificationsRef = _database.ref('notifications');
+    _postsRef = _database.ref('posts');
   }
 
   Future<void> createLikeNotification({
@@ -75,10 +75,10 @@ class NotificationService {
 
     try {
       // Query for unread notifications
-      DatabaseEvent event = (await _notificationsRef
+      DatabaseEvent event = await _notificationsRef
           .orderByChild('receiverId')
           .equalTo(currentUser.uid)
-          .get()) as DatabaseEvent;
+          .once();
 
       if (event.snapshot.value != null) {
         Map<dynamic, dynamic>? values = event.snapshot.value as Map?;
