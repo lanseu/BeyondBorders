@@ -1,4 +1,5 @@
 import 'package:beyond_borders/pages/community.dart';
+import 'package:beyond_borders/pages/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:beyond_borders/components/custom_drawer.dart';
 import 'package:beyond_borders/services/auth_wrapper.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/auth': (context) => AuthWrapper(),
         '/profile': (context) => Profile(),
         '/community': (context) => CommunityPage(),
+        '/notifications': (context) => NotificationsPage(),
       },
     );
   }
