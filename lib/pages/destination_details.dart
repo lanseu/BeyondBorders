@@ -69,7 +69,7 @@ class _DestinationDetailsState extends State<DestinationDetails> {
               SizedBox(
                 height: 500,
                 child: TabBarView(children: [
-                  OverviewPanel(),
+                  OverviewPanel(country: widget.country),
                   ReviewPanel(),
                   PhotosPanel(),
                 ]),
