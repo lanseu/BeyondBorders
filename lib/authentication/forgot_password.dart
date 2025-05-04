@@ -1,3 +1,4 @@
+import 'package:beyond_borders/authentication/custom_auth_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:beyond_borders/services/auth_service.dart';
@@ -16,7 +17,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   bool _isLoading = false;
   bool _emailSent = false;
-  String _debugMessage = '';
 
   @override
   void dispose() {
@@ -31,25 +31,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     setState(() {
       _isLoading = true;
-      _debugMessage = 'Checking email: $email';
     });
 
     try {
-      // Log the email being checked
-      debugPrint('Checking if email exists: $email');
-
-      // Check if email exists first
       final emailExists = await _authService.checkEmailExists(email);
-
-      debugPrint('Email exists check result: $emailExists');
-
-      setState(() {
-        _debugMessage = 'Email exists: $emailExists';
-      });
 
       if (!emailExists) {
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('No account found with this email address.'))
+          const SnackBar(content: Text('No account found with this email address.')),
         );
         setState(() {
           _isLoading = false;
@@ -57,26 +46,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         return;
       }
 
-      // Send the password reset email
-      debugPrint('Sending password reset email to: $email');
       await _authService.sendPasswordResetEmail(email);
-      debugPrint('Password reset email sent successfully');
 
       setState(() {
         _emailSent = true;
         _isLoading = false;
-        _debugMessage = '';
       });
     } catch (e) {
-      debugPrint('Error in password reset process: $e');
-
       setState(() {
         _isLoading = false;
-        _debugMessage = 'Error: $e';
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString().replaceAll('Exception: ', '')))
+        SnackBar(content: Text(e.toString().replaceAll('Exception: ', ''))),
       );
     }
   }
@@ -84,9 +66,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reset Password'),
-      ),
+      appBar: buildAppBar(context),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: _emailSent ? _buildEmailSentContent() : _buildResetForm(),
@@ -134,14 +114,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ? const CircularProgressIndicator()
                 : const Text('Send Reset Link', style: TextStyle(fontSize: 16)),
           ),
-          if (_debugMessage.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Text(
-                '(Debug) $_debugMessage',
-                style: const TextStyle(color: Colors.grey, fontSize: 12),
-              ),
-            ),
           const SizedBox(height: 16),
           TextButton(
             onPressed: () => Navigator.pop(context),
