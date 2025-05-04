@@ -82,7 +82,130 @@ class AuthService {
     }
   }
 
-  // Reset password
+  // Send password reset email
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(
+        email: email,
+        actionCodeSettings: ActionCodeSettings(
+          url: 'https://beyondborders.page.link/reset-password',
+          handleCodeInApp: true,
+          androidPackageName: 'com.example.beyond_borders',
+          androidInstallApp: true,
+          androidMinimumVersion: '1',
+          dynamicLinkDomain: 'beyondborders.page.link',
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      throw _handleAuthException(e);
+    } catch (e) {
+      throw Exception('Password reset email failed: ${e.toString()}');
+    }
+  }
+
+  // Verify password reset code
+  Future<bool> verifyPasswordResetCode(String code) async {
+    try {
+      await _auth.verifyPasswordResetCode(code);
+      return true;
+    } on FirebaseAuthException catch (e) {
+      throw _handleAuthException(e);
+    } catch (e) {
+      throw Exception('Failed to verify reset code: ${e.toString()}');
+    }
+  }
+
+  // Confirm password reset with new password
+  Future<void> confirmPasswordReset({
+    required String code,
+    required String newPassword
+  }) async {
+    try {
+      await _auth.confirmPasswordReset(
+        code: code,
+        newPassword: newPassword,
+      );
+    } on FirebaseAuthException catch (e) {
+      throw _handleAuthException(e);
+    } catch (e) {
+      throw Exception('Password reset failed: ${e.toString()}');
+    }
+  }
+
+  // Enhanced check email method with extra validation layers
+  Future<bool> checkEmailExists(String email) async {
+    // Normalize email to handle case-insensitivity
+    final normalizedEmail = email.trim().toLowerCase();
+    print('Checking if email exists: $normalizedEmail');
+
+    try {
+      // First approach: Check sign-in methods
+      final methods = await _auth.fetchSignInMethodsForEmail(normalizedEmail);
+      print('Sign-in methods found: ${methods.join(', ')}');
+
+      if (methods.isNotEmpty) {
+        return true;
+      }
+
+      // IMPORTANT FIX: Try a backup approach to check if email exists
+      // Option 1: If you have Firestore with user data
+      try {
+        final firestoreUsers = await FirebaseFirestore.instance
+            .collection('users')
+            .where('email', isEqualTo: normalizedEmail)
+            .limit(1)
+            .get();
+
+        if (firestoreUsers.docs.isNotEmpty) {
+          print('User found in Firestore database');
+          return true;
+        }
+      } catch (e) {
+        print('Firestore check error (non-critical): $e');
+        // Continue with other checks even if this one fails
+      }
+
+      // If you don't have Firestore or want an additional check
+      // Consider adding a custom claim or another database check here
+
+      // For debugging: Get all users
+      // This is for development only - remove in production!
+      try {
+        // If you have admin SDK access or a backend API that can list users
+        // List a few users to see what's in the database
+        print('Debug: Could not find user with email $normalizedEmail');
+      } catch (e) {
+        print('Debug error: $e');
+      }
+
+      // If all checks fail, the email doesn't exist
+      return false;
+    } on FirebaseAuthException catch (e) {
+      print('Firebase Auth Exception: ${e.code} - ${e.message}');
+      if (e.code == 'user-not-found') {
+        return false;
+      }
+      throw _handleAuthException(e);
+    } catch (e) {
+      print('Unexpected error checking email: $e');
+      throw Exception('Failed to check email: ${e.toString()}');
+    }
+  }
+
+// Add a debug method to try to reset password directly
+  Future<bool> attemptDirectPasswordReset(String email) async {
+    try {
+      // Try to send a reset email directly without checking first
+      await _auth.sendPasswordResetEmail(email: email.trim().toLowerCase());
+      print('Password reset email sent successfully');
+      return true;
+    } catch (e) {
+      print('Error sending password reset: $e');
+      return false;
+    }
+  }
+
+  // Reset password (original method)
   Future<void> resetPassword(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
@@ -124,6 +247,12 @@ class AuthService {
         break;
       case 'wrong-password':
         message = 'The password is incorrect.';
+        break;
+      case 'expired-action-code':
+        message = 'The password reset link has expired.';
+        break;
+      case 'invalid-action-code':
+        message = 'The password reset link is invalid.';
         break;
       case 'too-many-requests':
         message = 'Too many unsuccessful login attempts. Please try again later.';
