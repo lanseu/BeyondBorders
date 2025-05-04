@@ -265,6 +265,7 @@ class _DestinationState extends State<Destination> {
       'description': 'The city of lights and romance',
       'days': '4-5 days',
       'rating': 4.8,
+      'tags': ['Culture', 'Food'],
     },
     {
       'image': 'assets/images/tokyo.jpg',
@@ -272,6 +273,7 @@ class _DestinationState extends State<Destination> {
       'description': 'A bustling city blending tradition and technology',
       'days': '5-7 days',
       'rating': 4.7,
+      'tags': ['Culture', 'Adventure'],
     },
     {
       'image': 'assets/images/new_york.jpg',
@@ -279,6 +281,7 @@ class _DestinationState extends State<Destination> {
       'description': 'The city that never sleeps',
       'days': '3-5 days',
       'rating': 4.6,
+      'tags': ['Food', 'Relaxation'],
     },
     {
       'image': 'assets/images/rome.jpg',
@@ -286,6 +289,7 @@ class _DestinationState extends State<Destination> {
       'description': 'Historic city of ancient wonders',
       'days': '4-6 days',
       'rating': 4.7,
+      'tags': ['History', 'Culture'],
     },
     {
       'image': 'assets/images/sydney.jpg',
@@ -293,6 +297,7 @@ class _DestinationState extends State<Destination> {
       'description': 'Home of the iconic Opera House',
       'days': '4-5 days',
       'rating': 4.5,
+      'tags': ['Beach', 'Adventure', 'Relaxation'],
     },
     {
       'image': 'assets/images/cape_town.jpg',
@@ -300,6 +305,7 @@ class _DestinationState extends State<Destination> {
       'description': 'Beautiful coastal city with Table Mountain',
       'days': '5-6 days',
       'rating': 4.6,
+      'tags': ['Adventure', 'Relaxation'],
     },
     {
       'image': 'assets/images/dubai.jpg',
@@ -307,6 +313,7 @@ class _DestinationState extends State<Destination> {
       'description': 'City of skyscrapers, shopping, and desert safaris',
       'days': '3-4 days',
       'rating': 4.5,
+      'tags': ['Adventure', 'Relaxation'],
     },
     {
       'image': 'assets/images/london.jpeg',
@@ -314,6 +321,7 @@ class _DestinationState extends State<Destination> {
       'description': 'Historic landmarks and modern vibes',
       'days': '4-5 days',
       'rating': 4.7,
+      'tags': ['History', 'Culture'],
     },
     {
       'image': 'assets/images/barcelona.jpg',
@@ -321,6 +329,7 @@ class _DestinationState extends State<Destination> {
       'description': 'Art, architecture, and Mediterranean beaches',
       'days': '4-6 days',
       'rating': 4.6,
+      'tags': ['Beach', 'Food'],
     },
     {
       'image': 'assets/images/istanbul.jpg',
@@ -328,6 +337,7 @@ class _DestinationState extends State<Destination> {
       'description': 'Where East meets West',
       'days': '5-6 days',
       'rating': 4.7,
+      'tags': ['Culture', 'History', 'Food'],
     }
   ];
 
@@ -338,6 +348,7 @@ class _DestinationState extends State<Destination> {
       'country': 'Indonesia',
       'price': '\$80',
       'rating': 4.7,
+      'tags': ['Beach', 'Relaxation', 'Adventure'],
     },
     {
       'image': 'assets/images/santorini.jpg',
@@ -345,6 +356,7 @@ class _DestinationState extends State<Destination> {
       'country': 'Greece',
       'price': '\$350',
       'rating': 4.9,
+      'tags': ['Beach', 'Photography', 'Culture'], // Updated tags
     },
     {
       'image': 'assets/images/banff.jpg',
@@ -352,6 +364,7 @@ class _DestinationState extends State<Destination> {
       'country': 'Canada',
       'price': '\$150',
       'rating': 4.8,
+      'tags': ['Hiking', 'Adventure'],
     },
     {
       'image': 'assets/images/amalfi_coast.jpg',
@@ -359,6 +372,7 @@ class _DestinationState extends State<Destination> {
       'country': 'Italy',
       'price': '\$270',
       'rating': 4.9,
+      'tags': ['Beach', 'Culture'],
     },
     {
       'image': 'assets/images/kyoto.jpg',
@@ -366,6 +380,7 @@ class _DestinationState extends State<Destination> {
       'country': 'Japan',
       'price': '\$190',
       'rating': 4.7,
+      'tags': ['Culture', 'History'],
     },
     {
       'image': 'assets/images/queenstown.jpg',
@@ -373,6 +388,7 @@ class _DestinationState extends State<Destination> {
       'country': 'New Zealand',
       'price': '\$210',
       'rating': 4.8,
+      'tags': ['Adventure', 'Relaxation'],
     },
     {
       'image': 'assets/images/boracay.png',
@@ -380,6 +396,7 @@ class _DestinationState extends State<Destination> {
       'country': 'Philippines',
       'price': '\$300',
       'rating': 4.6,
+      'tags': ['Beach', 'Relaxation'],
     },
     {
       'image': 'assets/images/rio.jpg',
@@ -387,6 +404,7 @@ class _DestinationState extends State<Destination> {
       'country': 'Brazil',
       'price': '\$200',
       'rating': 4.6,
+      'tags': ['Adventure', 'Culture'],
     },
     {
       'image': 'assets/images/athens.jpg',
@@ -394,6 +412,7 @@ class _DestinationState extends State<Destination> {
       'country': 'Greece',
       'price': '\$180',
       'rating': 4.7,
+      'tags': ['History', 'Culture'],
     },
     {
       'image': 'assets/images/pyramid.jpg',
@@ -401,6 +420,7 @@ class _DestinationState extends State<Destination> {
       'country': 'Egypt',
       'price': '\$170',
       'rating': 4.5,
+      'tags': ['History', 'Adventure'],
     },
   ];
 
@@ -565,7 +585,7 @@ class _DestinationState extends State<Destination> {
         ),
         const SizedBox(height: 12),
         SizedBox(
-          height: 220,
+          height: 250,
           child: Stack(
             children: [
               PageView.builder(
@@ -676,6 +696,14 @@ class _DestinationState extends State<Destination> {
                                     ),
                                   ],
                                 ),
+                                const SizedBox(height: 8),
+                                Wrap(
+                                  spacing: 6,
+                                  runSpacing: 6,
+                                  children: (featuredDestinations[index]['tags'] ?? [])
+                                      .map<Widget>((tag) => _buildTagChip(tag))
+                                      .toList(),
+                                ),
                               ],
                             ),
                           ),
@@ -747,6 +775,38 @@ class _DestinationState extends State<Destination> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildTagChip(String tag) {
+    final Map<String, Map<String, Color>> colorMapping = {
+      'Hiking': {'background': Colors.green.shade100, 'text': Colors.green.shade800},
+      'Photography': {'background': Colors.pink.shade100, 'text': Colors.pink.shade800},
+      'Culture': {'background': Colors.purple.shade100, 'text': Colors.purple.shade800},
+      'Food': {'background': Colors.red.shade100, 'text': Colors.red.shade800},
+      'Beach': {'background': Colors.yellow.shade100, 'text': Colors.yellow.shade800},
+      'Adventure': {'background': Colors.orange.shade100, 'text': Colors.orange.shade800},
+      'Relaxation': {'background': Colors.teal.shade100, 'text': Colors.teal.shade800},
+      'History': {'background': Colors.brown.shade300, 'text': Colors.brown.shade800},
+      'Romantic': {'background': Colors.pink.shade50, 'text': Colors.pink.shade600},
+    };
+
+    final colors = colorMapping[tag] ?? {'background': Colors.grey.shade200, 'text': Colors.grey.shade800};
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: colors['background'],
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        tag,
+        style: TextStyle(
+          color: colors['text'],
+          fontSize: 10,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
     );
   }
 
@@ -826,7 +886,7 @@ class _DestinationState extends State<Destination> {
         ),
         SizedBox(height: 12),
         Container(
-          height: 200,
+          height: 240,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.symmetric(horizontal: 20),
@@ -844,6 +904,7 @@ class _DestinationState extends State<Destination> {
                         country: popularDestinations[index]['country'],
                         rating: popularDestinations[index]['rating'],
                         image: popularDestinations[index]['image'],
+                        tags: popularDestinations[index]['tags'],
                       ),
                     ),
                   );
@@ -974,6 +1035,14 @@ class _DestinationState extends State<Destination> {
                                       ],
                                     ),
                                   ],
+                                ),
+                                const SizedBox(height: 8),
+                                Wrap(
+                                  spacing: 6,
+                                  runSpacing: 6,
+                                  children: (popularDestinations[index]['tags'] ?? [])
+                                      .map<Widget>((tag) => _buildTagChip(tag))
+                                      .toList(),
                                 ),
                               ],
                             ),

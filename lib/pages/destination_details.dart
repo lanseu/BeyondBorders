@@ -16,6 +16,7 @@ class DestinationDetails extends StatefulWidget {
   final String image;
   final String? bestTime;
   final String? idealFor;
+  final List<String>? tags;
 
   const DestinationDetails({
     super.key,
@@ -25,6 +26,7 @@ class DestinationDetails extends StatefulWidget {
     required this.image,
     this.bestTime = 'March - May',
     this.idealFor = 'Couple, Friends',
+    this.tags,
   });
 
   @override
@@ -60,6 +62,37 @@ class _DestinationDetailsState extends State<DestinationDetails> {
 
   bool isFavourite = false;
 
+  Widget _buildTagChip(String tag) {
+    final Map<String, Map<String, Color>> colorMapping = {
+      'Hiking': {'background': Colors.green.shade100, 'text': Colors.green.shade800},
+      'Photography': {'background': Colors.pink.shade100, 'text': Colors.pink.shade800},
+      'Culture': {'background': Colors.purple.shade100, 'text': Colors.purple.shade800},
+      'Food': {'background': Colors.red.shade100, 'text': Colors.red.shade800},
+      'Beach': {'background': Colors.yellow.shade100, 'text': Colors.yellow.shade800},
+      'Adventure': {'background': Colors.orange.shade100, 'text': Colors.orange.shade800},
+      'Relaxation': {'background': Colors.teal.shade100, 'text': Colors.teal.shade800},
+      'History': {'background': Colors.brown.shade300, 'text': Colors.brown.shade800},
+    };
+
+    final colors = colorMapping[tag] ?? {'background': Colors.grey.shade200, 'text': Colors.grey.shade800};
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: colors['background'],
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        tag,
+        style: TextStyle(
+          color: colors['text'],
+          fontSize: 10,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -77,7 +110,7 @@ class _DestinationDetailsState extends State<DestinationDetails> {
                     _buildHeaderImage(),
                     _buildDestinationDetails(),
                     _buildInfoCards(),
-                    SizedBox(height: 20), // Add spacing here
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -239,7 +272,16 @@ class _DestinationDetailsState extends State<DestinationDetails> {
                 ),
               ),
             ],
-          )
+          ),
+          SizedBox(height: 10),
+          if (widget.tags != null && widget.tags!.isNotEmpty)
+            Wrap(
+              spacing: 8,
+              runSpacing: 6,
+              children: widget.tags!
+                  .map((tag) => _buildTagChip(tag))
+                  .toList(),
+            ),
         ],
       ),
     );
