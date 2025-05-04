@@ -5,6 +5,9 @@ import '../components/custom_appbar.dart';
 import '../components/destination_panels/overview_panel.dart';
 import '../components/destination_panels/photos_panel.dart';
 import '../components/destination_panels/review_panel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class DestinationDetails extends StatefulWidget {
   final String name;
@@ -31,6 +34,32 @@ class DestinationDetails extends StatefulWidget {
 }
 
 class _DestinationDetailsState extends State<DestinationDetails> {
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfFavorite();
+  }
+
+  void _checkIfFavorite() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final wishlistRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('wishlist')
+          .doc(widget.name);
+
+      final snapshot = await wishlistRef.get();
+      if (snapshot.exists) {
+        setState(() {
+          isFavourite = true;
+        });
+      }
+    }
+  }
+
+
   bool isFavourite = false;
 
   Widget _buildTagChip(String tag) {
@@ -146,11 +175,40 @@ class _DestinationDetailsState extends State<DestinationDetails> {
                   color: Colors.red,
                   size: 25,
                 ),
-                onPressed: () {
-                  setState(() {
-                    isFavourite = !isFavourite;
-                  });
+                onPressed: () async {
+                  final user = FirebaseAuth.instance.currentUser;
+                  if (user != null) {
+                    final wishlistRef = FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(user.uid)
+                        .collection('wishlist')
+                        .doc(widget.name); // using destination name as ID (better if you have a unique ID)
+
+                    final snapshot = await wishlistRef.get();
+
+                    if (snapshot.exists) {
+                      // Already favorited, so remove it
+                      await wishlistRef.delete();
+                      setState(() {
+                        isFavourite = false;
+                      });
+                    } else {
+                      // Not favorited, so add it
+                      await wishlistRef.set({
+                        'name': widget.name,
+                        'country': widget.country,
+                        'rating': widget.rating,
+                        'image': widget.image,
+                        'bestTime': widget.bestTime,
+                        'idealFor': widget.idealFor,
+                      });
+                      setState(() {
+                        isFavourite = true;
+                      });
+                    }
+                  }
                 },
+
               ),
             )),
       ],
