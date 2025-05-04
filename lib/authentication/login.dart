@@ -132,15 +132,7 @@ class _LoginState extends State<Login> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(
-                        '/reset-password',
-                        arguments: {'actionCode': 'test-code'},
-                      );
-                    },
-                    child: Text('Test Reset Password'),
-                  ),
+
                   // Email Text Field with validation
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
