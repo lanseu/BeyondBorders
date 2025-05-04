@@ -9,6 +9,7 @@ import 'package:beyond_borders/components/custom_appbar.dart';
 import 'all_popular_destinations.dart';
 import 'destination_details.dart';
 
+
 enum FilterType { all, categories, popularDestinations, activities }
 
 class Destination extends StatefulWidget {
@@ -29,6 +30,7 @@ class _DestinationState extends State<Destination> {
   int _currentFeaturedIndex = 0;
   Timer? _carouselTimer;
   final Set<String> _selectedFilters = {}; // Track selected filters
+
 
   void _startAutoScroll() {
     _carouselTimer = Timer.periodic(Duration(seconds: 3), (timer) {
@@ -497,21 +499,6 @@ class _DestinationState extends State<Destination> {
             _discoverNearYouSection(),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        currentIndex: 0,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            label: 'Explore',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border),
-            label: 'Wishlist',
-          ),
-        ],
       ),
     );
   }

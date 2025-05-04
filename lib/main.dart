@@ -1,5 +1,6 @@
 import 'package:beyond_borders/pages/community.dart';
 import 'package:beyond_borders/pages/notifications.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:beyond_borders/components/custom_drawer.dart';
 import 'package:beyond_borders/services/auth_wrapper.dart';
@@ -13,7 +14,9 @@ import 'package:beyond_borders/pages/destinations.dart';
 import 'package:beyond_borders/pages/about.dart';
 import 'package:beyond_borders/pages/profile.dart';
 import 'package:beyond_borders/pages/settings.dart';
+import 'package:beyond_borders/pages/wishlist.dart';
 import 'package:beyond_borders/authentication/forgot_password.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -127,6 +130,7 @@ class _MyAppState extends State<MyApp> {
         '/settings': (context) => SettingsPage(),
         '/forgot-password': (context) => ForgotPasswordScreen(),
       },
+        home: AuthWrapper(),
     );
   }
 }
@@ -151,21 +155,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Background color
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Lottie.asset(
-                "assets/animations/loading.json",
-                width: 200, height: 200,
-                fit: BoxFit.contain
-            ),
+            Lottie.asset("assets/animations/loading.json", width: 200, height: 200, fit: BoxFit.contain),
             SizedBox(height: 20),
-            Text(
-              "Loading...",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            Text("Loading...", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
@@ -173,15 +170,112 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 }
 
-// ✅ Home Page with Drawer
-class HomeWithDrawer extends StatelessWidget {
+// class HomeWithDrawer extends StatefulWidget {
+//   const HomeWithDrawer({super.key});
+//
+//   @override
+//   _HomeWithDrawerState createState() => _HomeWithDrawerState();
+// }
+//
+// class _HomeWithDrawerState extends State<HomeWithDrawer> {
+//   int _selectedIndex = 0;
+//
+//   final List<Widget> _pages = [
+//     Destination(),
+//     WishlistPage(),
+//   ];
+//
+//   void _onItemTapped(int index) {
+//     setState(() {
+//       _selectedIndex = index;
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: _pages[_selectedIndex],
+//       bottomNavigationBar: BottomNavigationBar(
+//         selectedItemColor: Colors.blue,
+//         unselectedItemColor: Colors.grey,
+//         currentIndex: _selectedIndex,
+//         onTap: _onItemTapped,
+//         items: const [
+//           BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
+//           BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'Wishlist'),
+//         ],
+//       ),
+//     );
+//   }
+// }
+//
+// class HomeWithDrawer extends StatelessWidget {
+//   const HomeWithDrawer({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: OnboardingScreen(),
+//       drawer: CustomDrawer(),
+//     );
+//   }
+// }
+
+
+class HomeWithDrawer extends StatefulWidget {
   const HomeWithDrawer({super.key});
 
   @override
+  _HomeWithDrawerState createState() => _HomeWithDrawerState();
+}
+
+class _HomeWithDrawerState extends State<HomeWithDrawer> {
+  int _selectedIndex = 0;
+  final List<Widget> _pages = [
+    Destination(),
+    WishlistPage(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: OnboardingScreen(),
-      drawer: CustomDrawer(),
+    // Using StreamBuilder to reactively listen for changes in authentication state
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Show loading spinner while checking auth state
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (!snapshot.hasData || snapshot.data == null) {
+          // If user is not logged in, redirect to OnboardingScreen
+          return OnboardingScreen();
+        }
+
+        // If logged in, display the HomeWithDrawer content with bottom navigation
+        return Scaffold(
+          drawer: CustomDrawer(),
+          body: _pages[_selectedIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            selectedItemColor: Colors.blue,
+            unselectedItemColor: Colors.grey,
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
+              BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'Wishlist'),
+            ],
+          ),
+        );
+      },
     );
   }
 }
