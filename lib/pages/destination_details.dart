@@ -67,43 +67,49 @@ class _DestinationDetailsState extends State<DestinationDetails> {
       child: Scaffold(
         appBar: buildAppBar(context, showBackButton: true),
         drawer: CustomDrawer(),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeaderImage(),
-              _buildDestinationDetails(),
-              _buildInfoCards(),
-
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: TabBar(labelColor: Theme.of(context).primaryColor,
-                  unselectedLabelColor: Colors.grey[600],
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Theme.of(context).primaryColor.withOpacity(0.1),
-                  ),
-                    tabs: [
-                      Tab(text: 'Overview'),
-                      Tab(text: 'Reviews'),
-                      Tab(text: 'Photos'),
-                    ],
-                  ),
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeaderImage(),
+                    _buildDestinationDetails(),
+                    _buildInfoCards(),
+                    SizedBox(height: 20), // Add spacing here
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 650,
-                child: TabBarView(children: [
-                  OverviewPanel(name: widget.name),
-                  ReviewPanel(name: widget.name),
-                  PhotosPanel(name: widget.name),
-                ]),
+            ];
+          },
+          body: Column(
+            children: [
+              _buildTabBar(),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    Column(
+                      children: [
+                        Expanded(child: OverviewPanel(name: widget.name)),
+                        _buildBookNowButton(),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Expanded(child: ReviewPanel(name: widget.name)),
+                        _buildBookNowButton(),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Expanded(child: PhotosPanel(name: widget.name)),
+                        _buildBookNowButton(),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              _buildBookNowButton()
             ],
           ),
         ),
@@ -298,29 +304,48 @@ class _DestinationDetailsState extends State<DestinationDetails> {
       ),
     );
   }
-}
 
-Widget _buildBookNowButton() {
-  return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
-            padding: EdgeInsets.symmetric(vertical: 15),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(11),
+  Widget _buildTabBar() {
+    return Container(
+      color: Colors.white,
+      child: TabBar(
+        labelColor: Theme.of(context).primaryColor,
+        unselectedLabelColor: Colors.grey[600],
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Theme.of(context).primaryColor.withOpacity(0.1),
+        ),
+        tabs: [
+          Tab(text: 'Overview'),
+          Tab(text: 'Reviews'),
+          Tab(text: 'Photos'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBookNowButton() {
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              padding: EdgeInsets.symmetric(vertical: 15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(11),
+              ),
+            ),
+            onPressed: () {},
+            child: Text(
+              'Book Now',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
           ),
-          onPressed: () {},
-          child: Text(
-            'Book Now',
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white),
-          ),
-        ),
-      ));
+        ));
+  }
 }
