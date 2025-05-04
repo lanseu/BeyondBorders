@@ -28,9 +28,9 @@ class _DestinationState extends State<Destination> {
   final PageController _pageController = PageController(viewportFraction: 0.85);
   int _currentFeaturedIndex = 0;
   Timer? _carouselTimer;
-  final Set<String> _selectedFilters = {}; // Track selected filters
+  final Set<String> _selectedFilters = {};
   List<Map<String, dynamic>> filteredDestinations = [];
-  bool showSearchResults = false; // Control when to show search results
+  bool showSearchResults = false;
   final TextEditingController _searchController = TextEditingController();
 
   void _startAutoScroll() {
@@ -38,7 +38,7 @@ class _DestinationState extends State<Destination> {
       if (_pageController.hasClients) {
         int nextPage = _pageController.page!.round() + 1;
         if (nextPage >= featuredDestinations.length) {
-          nextPage = 0; // Loop back to first
+          nextPage = 0;
         }
         _pageController.animateToPage(
           nextPage,
@@ -71,21 +71,21 @@ class _DestinationState extends State<Destination> {
         final matchesRating = _selectedFilters.any((filter) {
           if (filter.endsWith('star') || filter.endsWith('stars')) {
             final star = int.tryParse(filter.split(' ')[0]) ?? 0;
-            return rating >= star && rating < star + 1; // Match ratings within the range
+            return rating >= star && rating < star + 1;
           }
           return false;
         });
         return matchesTags || matchesSeason || matchesRating;
       }).toList();
-      showSearchResults = true; // Show filtered results
+      showSearchResults = true;
     });
   }
 
   void _clearFilters() {
     setState(() {
       _selectedFilters.clear();
-      filteredDestinations = popularDestinations; // Reset to show all destinations
-      showSearchResults = false; // Reset search results
+      filteredDestinations = popularDestinations;
+      showSearchResults = false; 
     });
   }
 
@@ -209,8 +209,8 @@ class _DestinationState extends State<Destination> {
                                 side: BorderSide(color: Colors.transparent),
                               ),
                               onPressed: () {
-                                _clearFilters(); // Clear filters and reset results
-                                Navigator.pop(context); // Close the modal
+                                _clearFilters();
+                                Navigator.pop(context);
                               },
                               child: Text(
                                 'Clear All',
@@ -229,8 +229,8 @@ class _DestinationState extends State<Destination> {
                                 side: BorderSide(color: Colors.transparent),
                               ),
                               onPressed: () {
-                                _applyFilters(); // Apply filters when "Apply Filters" is clicked
-                                Navigator.pop(context); // Close the modal
+                                _applyFilters();
+                                Navigator.pop(context);
                               },
                               child: Text(
                                 'Apply Filters',
@@ -394,7 +394,7 @@ class _DestinationState extends State<Destination> {
       'price': '\$80',
       'rating': 4.7,
       'tags': ['Beach', 'Relaxation', 'Adventure'],
-      'bestTime': 'March - May', // Added bestTime field
+      'bestTime': 'March - May',
     },
     {
       'image': 'assets/images/santorini.jpg',
@@ -403,7 +403,7 @@ class _DestinationState extends State<Destination> {
       'price': '\$350',
       'rating': 4.9,
       'tags': ['Beach', 'Photography', 'Culture'],
-      'bestTime': 'June - August', // Added bestTime field
+      'bestTime': 'June - August',
     },
     {
       'image': 'assets/images/banff.jpg',
@@ -412,7 +412,7 @@ class _DestinationState extends State<Destination> {
       'price': '\$150',
       'rating': 4.8,
       'tags': ['Hiking', 'Adventure'],
-      'bestTime': 'September - November', // Added bestTime field
+      'bestTime': 'September - November',
     },
     {
       'image': 'assets/images/amalfi_coast.jpg',
@@ -421,7 +421,7 @@ class _DestinationState extends State<Destination> {
       'price': '\$270',
       'rating': 4.9,
       'tags': ['Beach', 'Culture'],
-      'bestTime': 'April - June', // Added bestTime field
+      'bestTime': 'April - June',
     },
     {
       'image': 'assets/images/kyoto.jpg',
@@ -430,7 +430,7 @@ class _DestinationState extends State<Destination> {
       'price': '\$190',
       'rating': 4.7,
       'tags': ['Culture', 'History'],
-      'bestTime': 'March - May', // Added bestTime field
+      'bestTime': 'March - May',
     },
     {
       'image': 'assets/images/queenstown.jpg',
@@ -557,7 +557,7 @@ class _DestinationState extends State<Destination> {
 
   void _triggerSearch() {
     setState(() {
-      showSearchResults = true; // Show search results
+      showSearchResults = true;
     });
   }
 
@@ -566,7 +566,7 @@ class _DestinationState extends State<Destination> {
     super.initState();
     _getCategoryInfo();
     _startAutoScroll();
-    filteredDestinations = popularDestinations; // Initialize with all destinations
+    filteredDestinations = popularDestinations;
   }
 
   @override
@@ -616,25 +616,25 @@ class _DestinationState extends State<Destination> {
         ],
       ),
       child: Stack(
-        alignment: Alignment.centerRight, // Align icons to the right
+        alignment: Alignment.centerRight,
         children: [
           TextField(
             controller: _searchController,
             onChanged: (value) {
-              if (value.length <= 50) { // Limit input to 50 characters
-                _filterDestinations(value); // Update filtered destinations
+              if (value.length <= 50) { 
+                _filterDestinations(value); 
                 setState(() {
-                  showSearchResults = value.isNotEmpty; // Show results if input exists
+                  showSearchResults = value.isNotEmpty; 
                 });
               } else {
-                _searchController.text = value.substring(0, 50); // Trim input
+                _searchController.text = value.substring(0, 50); 
                 _searchController.selection = TextSelection.fromPosition(
                   TextPosition(offset: _searchController.text.length),
                 );
               }
             },
             onSubmitted: (value) {
-              _triggerSearch(); // Trigger search when "Enter" is pressed
+              _triggerSearch(); 
             },
             decoration: InputDecoration(
               filled: true,
@@ -645,7 +645,7 @@ class _DestinationState extends State<Destination> {
                 fontSize: 15,
               ),
               contentPadding: EdgeInsets.all(8),
-              prefixIcon: Icon(Icons.search, color: Colors.grey), // Left-side search icon
+              prefixIcon: Icon(Icons.search, color: Colors.grey), 
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide.none,
@@ -658,22 +658,22 @@ class _DestinationState extends State<Destination> {
               if (_searchController.text.isNotEmpty)
                 GestureDetector(
                   onTap: () {
-                    _searchController.clear(); // Clear the input
-                    _filterDestinations(''); // Reset the filtered destinations
+                    _searchController.clear();
+                    _filterDestinations(''); 
                     setState(() {
-                      showSearchResults = false; // Hide search results
+                      showSearchResults = false; 
                     });
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8.0),
-                    child: Icon(Icons.close, color: Colors.grey), // "X" icon
+                    child: Icon(Icons.close, color: Colors.grey),
                   ),
                 ),
               GestureDetector(
-                onTap: () => _showFilterModal(context), // Open filter modal
+                onTap: () => _showFilterModal(context),
                 child: Padding(
                   padding: const EdgeInsets.only(right: 8.0),
-                  child: Icon(Icons.filter_list, color: Colors.grey), // Filtering icon
+                  child: Icon(Icons.filter_list, color: Colors.grey),
                 ),
               ),
             ],
@@ -715,7 +715,7 @@ class _DestinationState extends State<Destination> {
                   physics: NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 1.0, // Adjusted to make the frame taller
+                    childAspectRatio: 0.8,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
                   ),
@@ -769,7 +769,7 @@ class _DestinationState extends State<Destination> {
                                   ),
                                 ),
                                 Expanded(
-                                  flex: 4, // Increased to make room for up to 3 tags
+                                  flex: 4,
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Column(
@@ -823,8 +823,7 @@ class _DestinationState extends State<Destination> {
                                                       .toString(),
                                                   style: const TextStyle(
                                                     color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
                                               ],
