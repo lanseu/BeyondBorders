@@ -1,5 +1,6 @@
 import 'package:beyond_borders/pages/community.dart';
 import 'package:beyond_borders/pages/notifications.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:beyond_borders/components/custom_drawer.dart';
 import 'package:beyond_borders/services/auth_wrapper.dart';
@@ -128,7 +129,7 @@ class _MyAppState extends State<MyApp> {
         '/settings': (context) => SettingsPage(),
         '/forgot-password': (context) => ForgotPasswordScreen(),
       },
-      home: const HomeWithDrawer(),
+      home: AuthWrapper(),
     );
   }
 }
@@ -167,6 +168,32 @@ class _LoadingScreenState extends State<LoadingScreen> {
     );
   }
 }
+
+class AuthWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(), // Stream that listens to auth changes
+      builder: (context, snapshot) {
+        // If the connection is active (checking auth state)
+        if (snapshot.connectionState == ConnectionState.active) {
+          // If the user is logged in
+          if (snapshot.hasData) {
+            return HomeWithDrawer(); // Show HomeWithDrawer if user is logged in
+          } else {
+            return Login(); // Show Login screen if user is not logged in
+          }
+        }
+
+        // While auth state is loading, show a loading screen
+        return Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      },
+    );
+  }
+}
+
 
 class HomeWithDrawer extends StatefulWidget {
   const HomeWithDrawer({super.key});
