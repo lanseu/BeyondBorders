@@ -182,7 +182,7 @@ class _DestinationDetailsState extends State<DestinationDetails> {
                         .collection('users')
                         .doc(user.uid)
                         .collection('wishlist')
-                        .doc(widget.name); // using destination name as ID (better if you have a unique ID)
+                        .doc(widget.name);
 
                     final snapshot = await wishlistRef.get();
 
