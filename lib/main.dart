@@ -12,6 +12,7 @@ import 'package:beyond_borders/pages/destinations.dart';
 import 'package:beyond_borders/pages/about.dart';
 import 'package:beyond_borders/pages/profile.dart';
 import 'package:beyond_borders/pages/settings.dart';
+import 'package:beyond_borders/pages/wishlist.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         '/notifications': (context) => NotificationsPage(),
         'settings': (context) => SettingsPage(),
       },
+      home: const HomeWithDrawer(),
     );
   }
 }
@@ -65,21 +67,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Background color
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Lottie.asset(
-                "assets/animations/loading.json",
-                width: 200, height: 200,
-                fit: BoxFit.contain
-            ),
+            Lottie.asset("assets/animations/loading.json", width: 200, height: 200, fit: BoxFit.contain),
             SizedBox(height: 20),
-            Text(
-              "Loading...",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            Text("Loading...", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
@@ -87,15 +82,41 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 }
 
-// ✅ Home Page with Drawer
-class HomeWithDrawer extends StatelessWidget {
+class HomeWithDrawer extends StatefulWidget {
   const HomeWithDrawer({super.key});
+
+  @override
+  _HomeWithDrawerState createState() => _HomeWithDrawerState();
+}
+
+class _HomeWithDrawerState extends State<HomeWithDrawer> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    Destination(),
+    WishlistPage(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: OnboardingScreen(),
-      drawer: CustomDrawer(),
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'Wishlist'),
+        ],
+      ),
     );
   }
 }
