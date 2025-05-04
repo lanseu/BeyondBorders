@@ -9,7 +9,6 @@ import 'package:beyond_borders/components/custom_appbar.dart';
 import 'all_popular_destinations.dart';
 import 'destination_details.dart';
 
-
 enum FilterType { all, categories, popularDestinations, activities }
 
 class Destination extends StatefulWidget {
@@ -30,7 +29,9 @@ class _DestinationState extends State<Destination> {
   int _currentFeaturedIndex = 0;
   Timer? _carouselTimer;
   final Set<String> _selectedFilters = {}; // Track selected filters
-
+  List<Map<String, dynamic>> filteredDestinations = [];
+  bool showSearchResults = false; // Control when to show search results
+  final TextEditingController _searchController = TextEditingController();
 
   void _startAutoScroll() {
     _carouselTimer = Timer.periodic(Duration(seconds: 3), (timer) {
@@ -45,6 +46,46 @@ class _DestinationState extends State<Destination> {
           curve: Curves.easeInOut,
         );
       }
+    });
+  }
+
+  void _applyFilters() {
+    setState(() {
+      filteredDestinations = popularDestinations.where((destination) {
+        final tags = (destination['tags'] ?? []).toSet();
+        final bestTime = destination['bestTime']?.toLowerCase() ?? '';
+        final rating = destination['rating'];
+        final matchesTags = _selectedFilters.isEmpty || _selectedFilters.any(tags.contains);
+        final matchesSeason = _selectedFilters.any((filter) {
+          if (filter == 'Spring') {
+            return bestTime.contains('march') || bestTime.contains('april') || bestTime.contains('may');
+          } else if (filter == 'Summer') {
+            return bestTime.contains('june') || bestTime.contains('july') || bestTime.contains('august');
+          } else if (filter == 'Fall') {
+            return bestTime.contains('september') || bestTime.contains('october') || bestTime.contains('november');
+          } else if (filter == 'Winter') {
+            return bestTime.contains('december') || bestTime.contains('january') || bestTime.contains('february');
+          }
+          return false;
+        });
+        final matchesRating = _selectedFilters.any((filter) {
+          if (filter.endsWith('star') || filter.endsWith('stars')) {
+            final star = int.tryParse(filter.split(' ')[0]) ?? 0;
+            return rating >= star && rating < star + 1; // Match ratings within the range
+          }
+          return false;
+        });
+        return matchesTags || matchesSeason || matchesRating;
+      }).toList();
+      showSearchResults = true; // Show filtered results
+    });
+  }
+
+  void _clearFilters() {
+    setState(() {
+      _selectedFilters.clear();
+      filteredDestinations = popularDestinations; // Reset to show all destinations
+      showSearchResults = false; // Reset search results
     });
   }
 
@@ -139,7 +180,7 @@ class _DestinationState extends State<Destination> {
                       ),
                       SizedBox(height: 24),
                       Text(
-                        'Minimum Rating',
+                        'Rating',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -150,9 +191,11 @@ class _DestinationState extends State<Destination> {
                         spacing: 12,
                         runSpacing: 12,
                         children: [
-                          _filterChip('4+', setState),
-                          _filterChip('4.5+', setState),
-                          _filterChip('4.8+', setState),
+                          _filterChip('1 star', setState),
+                          _filterChip('2 stars', setState),
+                          _filterChip('3 stars', setState),
+                          _filterChip('4 stars', setState),
+                          _filterChip('5 stars', setState),
                         ],
                       ),
                       SizedBox(height: 24),
@@ -166,9 +209,8 @@ class _DestinationState extends State<Destination> {
                                 side: BorderSide(color: Colors.transparent),
                               ),
                               onPressed: () {
-                                setState(() {
-                                  _selectedFilters.clear();
-                                });
+                                _clearFilters(); // Clear filters and reset results
+                                Navigator.pop(context); // Close the modal
                               },
                               child: Text(
                                 'Clear All',
@@ -187,7 +229,8 @@ class _DestinationState extends State<Destination> {
                                 side: BorderSide(color: Colors.transparent),
                               ),
                               onPressed: () {
-                                // Apply filters logic
+                                _applyFilters(); // Apply filters when "Apply Filters" is clicked
+                                Navigator.pop(context); // Close the modal
                               },
                               child: Text(
                                 'Apply Filters',
@@ -224,9 +267,11 @@ class _DestinationState extends State<Destination> {
       'Summer': {'border': Colors.yellow.shade200, 'text': Colors.yellow.shade900},
       'Fall': {'border': Colors.orange.shade200, 'text': Colors.orange.shade900},
       'Winter': {'border': Colors.blue.shade200, 'text': Colors.blue.shade900},
-      '4+': {'border': Colors.blue.shade100, 'text': Colors.blue.shade800},
-      '4.5+': {'border': Colors.blue.shade100, 'text': Colors.blue.shade800},
-      '4.8+': {'border': Colors.blue.shade100, 'text': Colors.blue.shade800},
+      '1 star': {'border': Colors.blue.shade100, 'text': Colors.blue.shade800},
+      '2 stars': {'border': Colors.blue.shade100, 'text': Colors.blue.shade800},
+      '3 stars': {'border': Colors.blue.shade100, 'text': Colors.blue.shade800},
+      '4 stars': {'border': Colors.blue.shade100, 'text': Colors.blue.shade800},
+      '5 stars': {'border': Colors.blue.shade100, 'text': Colors.blue.shade800},
     };
 
     final colors = colorMapping[label] ?? {'border': Color(0xFFD6D6D6), 'text': Color(0xFF6E6E6E)};
@@ -257,7 +302,7 @@ class _DestinationState extends State<Destination> {
       ),
     );
   }
-  
+
   final List<Map<String, dynamic>> featuredDestinations = [
     {
       'image': 'assets/images/paris.jpg',
@@ -349,6 +394,7 @@ class _DestinationState extends State<Destination> {
       'price': '\$80',
       'rating': 4.7,
       'tags': ['Beach', 'Relaxation', 'Adventure'],
+      'bestTime': 'March - May', // Added bestTime field
     },
     {
       'image': 'assets/images/santorini.jpg',
@@ -356,7 +402,8 @@ class _DestinationState extends State<Destination> {
       'country': 'Greece',
       'price': '\$350',
       'rating': 4.9,
-      'tags': ['Beach', 'Photography', 'Culture'], // Updated tags
+      'tags': ['Beach', 'Photography', 'Culture'],
+      'bestTime': 'June - August', // Added bestTime field
     },
     {
       'image': 'assets/images/banff.jpg',
@@ -365,6 +412,7 @@ class _DestinationState extends State<Destination> {
       'price': '\$150',
       'rating': 4.8,
       'tags': ['Hiking', 'Adventure'],
+      'bestTime': 'September - November', // Added bestTime field
     },
     {
       'image': 'assets/images/amalfi_coast.jpg',
@@ -373,6 +421,7 @@ class _DestinationState extends State<Destination> {
       'price': '\$270',
       'rating': 4.9,
       'tags': ['Beach', 'Culture'],
+      'bestTime': 'April - June', // Added bestTime field
     },
     {
       'image': 'assets/images/kyoto.jpg',
@@ -381,6 +430,7 @@ class _DestinationState extends State<Destination> {
       'price': '\$190',
       'rating': 4.7,
       'tags': ['Culture', 'History'],
+      'bestTime': 'March - May', // Added bestTime field
     },
     {
       'image': 'assets/images/queenstown.jpg',
@@ -487,15 +537,41 @@ class _DestinationState extends State<Destination> {
     sortActivities();
   }
 
+  void _filterDestinations(String query) {
+    setState(() {
+      searchQuery = query;
+      if (query.isEmpty) {
+        filteredDestinations = popularDestinations;
+      } else {
+        filteredDestinations = popularDestinations.where((destination) {
+          final name = destination['name'].toLowerCase();
+          final country = destination['country'].toLowerCase();
+          final tags = (destination['tags'] ?? []).join(' ').toLowerCase();
+          return name.contains(query.toLowerCase()) ||
+              country.contains(query.toLowerCase()) ||
+              tags.contains(query.toLowerCase());
+        }).toList();
+      }
+    });
+  }
+
+  void _triggerSearch() {
+    setState(() {
+      showSearchResults = true; // Show search results
+    });
+  }
+
   @override
   void initState() {
-    _getCategoryInfo();
     super.initState();
+    _getCategoryInfo();
     _startAutoScroll();
+    filteredDestinations = popularDestinations; // Initialize with all destinations
   }
 
   @override
   void dispose() {
+    _searchController.dispose();
     _pageController.dispose();
     _carouselTimer?.cancel();
     super.dispose();
@@ -512,11 +588,12 @@ class _DestinationState extends State<Destination> {
           children: [
             _searchField(),
             SizedBox(height: 20),
-            _featuredDestinationsSection(),
-            SizedBox(height: 20),
-            _popularDestinationsSection(),
-            SizedBox(height: 20),
-            _discoverNearYouSection(),
+            if (showSearchResults) _filteredDestinationsSection(),
+            if (!showSearchResults) _featuredDestinationsSection(),
+            if (!showSearchResults) SizedBox(height: 20),
+            if (!showSearchResults) _popularDestinationsSection(),
+            if (!showSearchResults) SizedBox(height: 20),
+            if (!showSearchResults) _discoverNearYouSection(),
           ],
         ),
       ),
@@ -538,33 +615,247 @@ class _DestinationState extends State<Destination> {
           )
         ],
       ),
-      child: TextField(
-        onChanged: (value) {
-          setState(() {
-            searchQuery = value;
-          });
-        },
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'Search',
-          hintStyle: TextStyle(
-            color: Color(0xff828796),
-            fontSize: 15,
+      child: Stack(
+        alignment: Alignment.centerRight, // Align icons to the right
+        children: [
+          TextField(
+            controller: _searchController,
+            onChanged: (value) {
+              if (value.length <= 50) { // Limit input to 50 characters
+                _filterDestinations(value); // Update filtered destinations
+                setState(() {
+                  showSearchResults = value.isNotEmpty; // Show results if input exists
+                });
+              } else {
+                _searchController.text = value.substring(0, 50); // Trim input
+                _searchController.selection = TextSelection.fromPosition(
+                  TextPosition(offset: _searchController.text.length),
+                );
+              }
+            },
+            onSubmitted: (value) {
+              _triggerSearch(); // Trigger search when "Enter" is pressed
+            },
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              hintText: 'Search destinations...',
+              hintStyle: TextStyle(
+                color: Color(0xff828796),
+                fontSize: 15,
+              ),
+              contentPadding: EdgeInsets.all(8),
+              prefixIcon: Icon(Icons.search, color: Colors.grey), // Left-side search icon
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide.none,
+              ),
+            ),
           ),
-          contentPadding: EdgeInsets.all(8),
-          prefixIcon: Icon(Icons.search, color: Colors.grey),
-          suffixIcon: GestureDetector(
-            onTap: () => _showFilterModal(context),
-            child: Icon(Icons.filter_list, color: Colors.grey),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (_searchController.text.isNotEmpty)
+                GestureDetector(
+                  onTap: () {
+                    _searchController.clear(); // Clear the input
+                    _filterDestinations(''); // Reset the filtered destinations
+                    setState(() {
+                      showSearchResults = false; // Hide search results
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(Icons.close, color: Colors.grey), // "X" icon
+                  ),
+                ),
+              GestureDetector(
+                onTap: () => _showFilterModal(context), // Open filter modal
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Icon(Icons.filter_list, color: Colors.grey), // Filtering icon
+                ),
+              ),
+            ],
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide.none,
-          ),
-        ),
+        ],
       ),
     );
+  }
+
+  Widget _filteredDestinationsSection() {
+    return filteredDestinations.isEmpty
+        ? Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              'No destinations found.',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Search Results',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 12),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1.0, // Adjusted to make the frame taller
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                  ),
+                  itemCount: filteredDestinations.length,
+                  itemBuilder: (context, index) {
+                    final destination = filteredDestinations[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DestinationDetails(
+                              name: destination['name'],
+                              country: destination['country'],
+                              rating: destination['rating'],
+                              image: destination['image'],
+                              tags: destination['tags'],
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 1,
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Container(
+                            color: Colors.white,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(destination['image']),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    width: double.infinity,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 4, // Increased to make room for up to 3 tags
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(
+                                          destination['name'],
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.location_on,
+                                                color: Colors.grey, size: 14),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              destination['country'],
+                                              style: const TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              destination['price'],
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Icon(Icons.star,
+                                                    color: Colors.amber,
+                                                    size: 16),
+                                                const SizedBox(width: 2),
+                                                Text(
+                                                  destination['rating']
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8),
+                                        if (destination['tags'] != null)
+                                          Wrap(
+                                            spacing: 6,
+                                            runSpacing: 6,
+                                            children: (destination['tags'] ?? [])
+                                                .map<Widget>(
+                                                    (tag) => _buildTagChip(tag))
+                                                .toList(),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
   }
 
   // Featured Destinations section
