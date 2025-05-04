@@ -22,6 +22,10 @@ class _LoginState extends State<Login> {
   // Add this variable to track password visibility
   bool _obscurePassword = true;
 
+  // Error message strings
+  String? _emailError;
+  String? _passwordError;
+
   // Create instance of AuthService
   final AuthService _authService = AuthService();
 
@@ -35,6 +39,12 @@ class _LoginState extends State<Login> {
 
   // Function to handle form submission
   void _submitForm() async {
+    // Reset error messages first
+    setState(() {
+      _emailError = null;
+      _passwordError = null;
+    });
+
     if (_formKey.currentState!.validate()) {
       try {
         setState(() {
@@ -50,10 +60,28 @@ class _LoginState extends State<Login> {
         // Show success dialog
         _showSuccessDialog(context);
       } catch (e) {
-        // Show error message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        // Handle different error types and set appropriate error messages
+        String errorMessage = e.toString();
+
+        // Clean up the error message by removing "Exception:" prefix
+        if (errorMessage.contains('Exception:')) {
+          errorMessage = errorMessage.replaceAll('Exception:', '').trim();
+        }
+
+        if (errorMessage.contains('email')) {
+          setState(() {
+            _emailError = errorMessage;
+          });
+        } else if (errorMessage.contains('password')) {
+          setState(() {
+            _passwordError = errorMessage;
+          });
+        } else {
+          // For general errors, show both
+          setState(() {
+            _emailError = errorMessage;
+          });
+        }
       } finally {
         setState(() {
           _isLoading = false;
@@ -104,55 +132,133 @@ class _LoginState extends State<Login> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 16),
-
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        '/reset-password',
+                        arguments: {'actionCode': 'test-code'},
+                      );
+                    },
+                    child: Text('Test Reset Password'),
+                  ),
                   // Email Text Field with validation
-                  TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText: 'Enter your email',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.email),
-                    ),
-                    validator: (value) => _validateField(value, 'Email'),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          labelText: 'Enter your email',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.email),
+                          // Add red border if there's an error
+                          enabledBorder: _emailError != null
+                              ? OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          )
+                              : null,
+                          focusedBorder: _emailError != null
+                              ? OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          )
+                              : null,
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          // Remove the default error text (we'll show it separately below)
+                          errorStyle: TextStyle(height: 0, fontSize: 0),
+                        ),
+                        validator: (value) => _validateField(value, 'Email'),
+                      ),
+                      // Show error message if exists
+                      if (_emailError != null)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                          child: Text(
+                            _emailError!,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12.0,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                   SizedBox(height: 16),
 
                   // Password Text Field with validation and toggle visibility
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: _obscurePassword, // Use our toggle variable here
-                    decoration: InputDecoration(
-                      labelText: 'Enter your password',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.lock),
-                      // Add suffix icon button to toggle password visibility
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          // Change the icon based on the state
-                          _obscurePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: Colors.grey,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: _obscurePassword, // Use our toggle variable here
+                        decoration: InputDecoration(
+                          labelText: 'Enter your password',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.lock),
+                          // Add red border if there's an error
+                          enabledBorder: _passwordError != null
+                              ? OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          )
+                              : null,
+                          focusedBorder: _passwordError != null
+                              ? OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          )
+                              : null,
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          // Remove the default error text (we'll show it separately below)
+                          errorStyle: TextStyle(height: 0, fontSize: 0),
+                          // Add suffix icon button to toggle password visibility
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              // Change the icon based on the state
+                              _obscurePassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              // Toggle password visibility state
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                          ),
                         ),
-                        onPressed: () {
-                          // Toggle password visibility state
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
+                        validator: (value) => _validateField(value, 'Password'),
                       ),
-                    ),
-                    validator: (value) => _validateField(value, 'Password'),
+                      // Show error message if exists
+                      if (_passwordError != null)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                          child: Text(
+                            _passwordError!,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12.0,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
 
                   // Forgot password link
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () {
-                        _showForgotPasswordDialog(context);
-                      },
+                      onPressed: () => Navigator.pushNamed(context, '/forgot-password'),
                       child: Text(
                         'Forgot Password?',
                         style: TextStyle(color: Colors.blue),
@@ -269,58 +375,102 @@ class _LoginState extends State<Login> {
     );
   }
 
-  // Show Forgot Password Dialog
+  // Show Forgot Password Dialog with error handling
   void _showForgotPasswordDialog(BuildContext context) {
     final TextEditingController resetEmailController = TextEditingController();
-    bool _obscureResetPassword = true; // For reset password visibility toggle if needed
+    String? resetEmailError;
 
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Reset Password'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Enter your email to receive a password reset link'),
-              SizedBox(height: 16),
-              TextFormField(
-                controller: resetEmailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.email),
+      builder: (BuildContext dialogContext) {
+        return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                title: Text('Reset Password'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Enter your email to receive a password reset link'),
+                    SizedBox(height: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextFormField(
+                          controller: resetEmailController,
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            border: OutlineInputBorder(),
+                            prefixIcon: Icon(Icons.email),
+                            errorStyle: TextStyle(height: 0, fontSize: 0),
+                            // Add red border if there's an error
+                            enabledBorder: resetEmailError != null
+                                ? OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red),
+                            )
+                                : null,
+                            focusedBorder: resetEmailError != null
+                                ? OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red),
+                            )
+                                : null,
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                        if (resetEmailError != null)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                            child: Text(
+                              resetEmailError!,
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 12.0,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
                 ),
-                keyboardType: TextInputType.emailAddress,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                if (resetEmailController.text.isNotEmpty) {
-                  try {
-                    await _authService.resetPassword(resetEmailController.text);
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Password reset email sent!')),
-                    );
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(e.toString())),
-                    );
-                  }
-                }
-              },
-              child: Text('Send Reset Link'),
-            ),
-          ],
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Cancel'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (resetEmailController.text.isEmpty) {
+                        setState(() {
+                          resetEmailError = 'Email is required';
+                        });
+                        return;
+                      }
+
+                      try {
+                        await _authService.resetPassword(resetEmailController.text);
+                        Navigator.pop(dialogContext);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Password reset email sent!')),
+                        );
+                      } catch (e) {
+                        String errorMessage = e.toString();
+
+                        // Clean up the error message by removing "Exception:" prefix
+                        if (errorMessage.contains('Exception:')) {
+                          errorMessage = errorMessage.replaceAll('Exception:', '').trim();
+                        }
+
+                        setState(() {
+                          resetEmailError = errorMessage;
+                        });
+                      }
+                    },
+                    child: Text('Send Reset Link'),
+                  ),
+                ],
+              );
+            }
         );
       },
     );
