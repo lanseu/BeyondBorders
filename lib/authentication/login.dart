@@ -1,3 +1,4 @@
+import 'package:beyond_borders/main.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:beyond_borders/pages/destinations.dart';
@@ -352,7 +353,7 @@ class _LoginState extends State<Login> {
                   Navigator.pop(context); // Close the dialog
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => Destination()),
+                    MaterialPageRoute(builder: (context) =>  HomeWithDrawer()),
                   );
                 },
                 child: Text(
