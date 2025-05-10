@@ -55,6 +55,9 @@ class _DestinationState extends State<Destination> {
         final tags = (destination['tags'] ?? []).toSet();
         final bestTime = destination['bestTime']?.toLowerCase() ?? '';
         final rating = destination['rating'];
+        final price = destination['price']?.replaceAll('\$', '').replaceAll(',', '') ?? '0';
+        final priceValue = double.tryParse(price) ?? 0.0;
+
         final matchesTags = _selectedFilters.isEmpty || _selectedFilters.any(tags.contains);
         final matchesSeason = _selectedFilters.any((filter) {
           if (filter == 'Spring') {
@@ -75,7 +78,18 @@ class _DestinationState extends State<Destination> {
           }
           return false;
         });
-        return matchesTags || matchesSeason || matchesRating;
+        final matchesCost = _selectedFilters.any((filter) {
+          if (filter == 'Budget (\$0 - \$149)') {
+            return priceValue <= 149;
+          } else if (filter == 'Mid-range (\$150 - \$299)') {
+            return priceValue >= 150 && priceValue <= 299;
+          } else if (filter == 'Luxury (\$300 - \$350)') {
+            return priceValue >= 300 && priceValue <= 350;
+          }
+          return false;
+        });
+
+        return matchesTags || matchesSeason || matchesRating || matchesCost;
       }).toList();
       showSearchResults = true;
     });
@@ -199,6 +213,24 @@ class _DestinationState extends State<Destination> {
                         ],
                       ),
                       SizedBox(height: 24),
+                      Text(
+                        'Cost',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          _filterChip('Budget (\$0 - \$149)', setState),
+                          _filterChip('Mid-range (\$150 - \$299)', setState),
+                          _filterChip('Luxury (\$300 - \$350)', setState),
+                        ],
+                      ),
+                      SizedBox(height: 24),
                       Row(
                         children: [
                           Expanded(
@@ -272,6 +304,9 @@ class _DestinationState extends State<Destination> {
       '3 stars': {'border': Colors.blue.shade100, 'text': Colors.blue.shade800},
       '4 stars': {'border': Colors.blue.shade100, 'text': Colors.blue.shade800},
       '5 stars': {'border': Colors.blue.shade100, 'text': Colors.blue.shade800},
+      'Budget (\$0 - \$149)': {'border': Colors.green.shade400, 'text': Colors.green.shade900}, // Darker green
+      'Mid-range (\$150 - \$299)': {'border': Colors.orange.shade400, 'text': Colors.orange.shade900}, // Darker orange
+      'Luxury (\$300 - \$350)': {'border': Colors.red.shade400, 'text': Colors.red.shade900}, // Darker red
     };
 
     final colors = colorMapping[label] ?? {'border': Color(0xFFD6D6D6), 'text': Color(0xFF6E6E6E)};
