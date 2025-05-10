@@ -4,6 +4,8 @@ import 'package:beyond_borders/authentication/login.dart';
 import 'package:beyond_borders/pages/destinations.dart';
 import 'package:beyond_borders/services/auth_service.dart';
 
+import '../main.dart';
+
 class AuthWrapper extends StatelessWidget {
   final AuthService _authService = AuthService();
 
@@ -16,7 +18,7 @@ class AuthWrapper extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.active) {
           User? user = snapshot.data;
           if (user != null) {
-            return Destination();
+            return HomeWithDrawer();
           }
           // Otherwise, show login
           return Login();

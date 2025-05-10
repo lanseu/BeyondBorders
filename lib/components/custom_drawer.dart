@@ -1,3 +1,4 @@
+import 'package:beyond_borders/main.dart';
 import 'package:beyond_borders/pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -285,7 +286,7 @@ class DrwListView extends StatelessWidget {
           title: "Home",
           iconPath: 'assets/icons/home_icon.svg',
           onTap: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const Destination())),
+              context, MaterialPageRoute(builder: (context) => const HomeWithDrawer())),
         ),
         const SizedBox(height: 10),
         HoverListTile(

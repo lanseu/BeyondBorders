@@ -130,7 +130,7 @@ class _MyAppState extends State<MyApp> {
         '/settings': (context) => SettingsPage(),
         '/forgot-password': (context) => ForgotPasswordScreen(),
       },
-        home: AuthWrapper(),
+      home: AuthWrapper(),
     );
   }
 }
@@ -169,58 +169,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
     );
   }
 }
-
-// class HomeWithDrawer extends StatefulWidget {
-//   const HomeWithDrawer({super.key});
-//
-//   @override
-//   _HomeWithDrawerState createState() => _HomeWithDrawerState();
-// }
-//
-// class _HomeWithDrawerState extends State<HomeWithDrawer> {
-//   int _selectedIndex = 0;
-//
-//   final List<Widget> _pages = [
-//     Destination(),
-//     WishlistPage(),
-//   ];
-//
-//   void _onItemTapped(int index) {
-//     setState(() {
-//       _selectedIndex = index;
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: _pages[_selectedIndex],
-//       bottomNavigationBar: BottomNavigationBar(
-//         selectedItemColor: Colors.blue,
-//         unselectedItemColor: Colors.grey,
-//         currentIndex: _selectedIndex,
-//         onTap: _onItemTapped,
-//         items: const [
-//           BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
-//           BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'Wishlist'),
-//         ],
-//       ),
-//     );
-//   }
-// }
-//
-// class HomeWithDrawer extends StatelessWidget {
-//   const HomeWithDrawer({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: OnboardingScreen(),
-//       drawer: CustomDrawer(),
-//     );
-//   }
-// }
-
 
 class HomeWithDrawer extends StatefulWidget {
   const HomeWithDrawer({super.key});
